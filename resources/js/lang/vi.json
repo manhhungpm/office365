@@ -1,0 +1,109 @@
+{
+  "alert": {
+    "add_success": "Thêm {0} thành công!",
+    "delete_success": "Xóa {0} thành công!",
+    "notice": "Thông báo",
+    "try_again": "Có lỗi xảy ra, vui lòng thử lại sau!",
+    "update_success": "Cập nhật {0} thành công!"
+  },
+  "auth": {
+    "forgot_pass": "Quên mật  khẩu?",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "password": "Mật khẩu",
+    "remember": "Ghi nhớ",
+    "username": "Tên đăng nhập"
+  },
+  "button": {
+    "add": "Thêm mới",
+    "cancel": "Hủy bỏ",
+    "ok": "Đồng ý",
+    "update": "Cập nhật"
+  },
+  "form": {
+    "log": {
+      "list": "Danh sách log"
+    },
+    "permission": {
+      "delete_confirm": "Bạn chắc chắn muốn xóa quyền \"<span class=\"text-danger\">{0}</span>\"?",
+      "description": "Mô tả",
+      "display_name": "Tên hiển thị",
+      "insert_title": "Thêm quyền người dùng",
+      "list": "Danh sách quyền người dùng",
+      "name": "Mã quyền",
+      "permission": "quyền người dùng",
+      "update_title": "Cập nhật quyền người dùng"
+    },
+    "product_group": {
+      "code": "Mã nhóm",
+      "delete_confirm": "Bạn chắc chắn muốn xóa nhóm sản phẩm \"<span class=\"text-danger\">{0}</span>\"?",
+      "description": "Mô tả",
+      "insert_title": "Thêm nhóm sản phẩm",
+      "list": "Danh sách nhóm sản phẩm",
+      "name": "Tên nhóm",
+      "product_group": "nhóm sản phẩm",
+      "start_time": "Ngày bắt đầu",
+      "update_title": "Cập nhật nhóm sản phẩm"
+    },
+    "role": {
+      "delete_confirm": "Bạn chắc chắn muốn xóa nhóm người dùng \"<span class=\"text-danger\">{0}</span>\"?",
+      "description": "Mô tả",
+      "display_name": "Tên hiển thị",
+      "insert_title": "Thêm nhóm người dùng",
+      "list": "Danh sách nhóm người dùng",
+      "name": "Mã nhóm người dùng",
+      "permission_list": "Danh sách quyền người dùng",
+      "role": "nhóm người dùng",
+      "update_title": "Cập nhật nhóm người dùng"
+    },
+    "service": {
+      "code": "Mã dịch vụ",
+      "delete_confirm": "Bạn chắc chắn muốn xóa dịch vụ \"<span class=\"text-danger\">{0}</span>\"?",
+      "description": "Mô tả",
+      "insert_title": "Thêm dịch vụ",
+      "list": "Danh sách dịch vụ",
+      "name": "Tên dịch vụ",
+      "service": "dịch vụ",
+      "start_time": "Ngày bắt đầu",
+      "update_title": "Cập nhật dịch vụ"
+    },
+    "logs":{
+      "list": "Danh sách Logs"
+    },
+    "user": {
+      "delete_confirm": "Bạn chắc chắn muốn xóa người dùng \"<span class=\"text-danger\">{0}</span>\"?",
+      "display_name": "Tên hiển thị",
+      "email": "Email",
+      "insert_title": "Thêm người dùng",
+      "list": "Danh sách người dùng",
+      "name": "Tên người dùng",
+      "password": "Mật khẩu",
+      "renew_password": "Cập nhật mật khẩu",
+      "repassword": "Nhập lại mật khẩu",
+      "select_role": "Chọn nhóm người dùng",
+      "update_password": "mật khẩu",
+      "update_title": "Cập nhật người dùng",
+      "user": "người dùng",
+      "note": "Ghi chú"
+    }
+  },
+  "lang": {
+    "choose_language": "Chọn ngôn ngữ"
+  },
+  "menu": {
+    "admin": {
+      "permission": "Quyền người dùng",
+      "role": "Nhóm người dùng",
+      "user": "Người dùng"
+    },
+    "dashboard": "Dashboard",
+    "user_manager": "Quản lý người dùng"
+  },
+  "profile": {
+    "activity": "Hoạt động gần đây",
+    "faq": "Hỏi - Đáp",
+    "messages": "Tin nhắn",
+    "my_profile": "Trang cá nhân",
+    "support": "Hỗ trợ"
+  }
+}

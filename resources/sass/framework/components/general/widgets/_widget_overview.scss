@@ -1,0 +1,42 @@
+.m-widget-overview {
+  .m-widget1__item {
+    padding: 1.0rem 0;
+
+    .m-widget1__title {
+      margin-bottom: 10px;
+    }
+
+    .m-widget1__desc {
+      color: #646464;
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+    .m-widget1__number {
+      font-size: 1.1rem;
+    }
+  }
+
+  .m-widget6__item {
+    .m-widget6__text {
+      color: #646464;
+    }
+  }
+}
+
+.m-widget-dpi-overview {
+  .m-widget15__items {
+    .m-widget15__item {
+      .m-widget15__text {
+        float: none;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .m-widget15__chart {
+    margin-top: 2rem;
+    margin-bottom: 0;
+  }
+}

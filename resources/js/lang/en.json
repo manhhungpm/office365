@@ -1,0 +1,106 @@
+{
+  "alert": {
+    "add_success": "Add {0} successfully!",
+    "delete_success": "Delete {0} successfully!",
+    "notice": "Notice",
+    "try_again": "An error occurred, please try again later!",
+    "update_success": "Update {0} successfully!"
+  },
+  "auth": {
+    "forgot_pass": "Forgot Password?",
+    "login": "Login",
+    "logout": "Logout",
+    "password": "Password",
+    "remember": "Remember",
+    "username": "Username"
+  },
+  "button": {
+    "add": "Add new",
+    "cancel": "Cancel",
+    "ok": "Ok",
+    "update": "Update"
+  },
+  "form": {
+    "log": {
+      "list": "Log list"
+    },
+    "permission": {
+      "delete_confirm": "Are you sure to delete \"<span class=\"text-danger\">{0}</span>\"?",
+      "description": "Description",
+      "display_name": "Display Name",
+      "insert_title": "Add new permission",
+      "list": "Permission list",
+      "name": "Permission Name",
+      "permission": "permission",
+      "update_title": "Update permission"
+    },
+    "product_group": {
+      "code": "Product Group Code",
+      "delete_confirm": "Are you sure to delete \"<span class=\"text-danger\">{0}</span>\"?",
+      "description": "Description",
+      "insert_title": "Add new product group",
+      "list": "Product group list",
+      "name": "Product group name",
+      "product_group": "product group",
+      "start_time": "Start date",
+      "update_title": "Update product group"
+    },
+    "role": {
+      "delete_confirm": "Are you sure to delete \"<span class=\"text-danger\">{0}</span>\"?",
+      "description": "Description",
+      "display_name": "Display Name",
+      "insert_title": "Add new role",
+      "list": "Role list",
+      "name": "Role Name",
+      "permission_list": "Permission list",
+      "role": "role",
+      "update_title": "Update role"
+    },
+    "service": {
+      "code": "Service Code",
+      "delete_confirm": "Are you sure to delete \"<span class=\"text-danger\">{0}</span>\"?",
+      "description": "Description",
+      "insert_title": "Add new service",
+      "list": "Service list",
+      "name": "Service Name",
+      "service": "service",
+      "start_time": "Start date",
+      "update_title": "Update service"
+    },
+    "user": {
+      "delete_confirm": "Are you sure to delete \"<span class=\"text-danger\">{0}</span>\"?",
+      "display_name": "Display Name",
+      "email": "Email",
+      "insert_title": "Add new user",
+      "list": "User list",
+      "name": "User Name",
+      "password": "Password",
+      "renew_password": "Update password",
+      "repassword": "Password confimation",
+      "select_role": "Select role",
+      "update_password": "password",
+      "update_title": "Update user",
+      "user": "user",
+      "note": "Note"
+    }
+  },
+  "lang": {
+    "choose_language": "Choose a language"
+  },
+  "menu": {
+    "admin": {
+      "permission": "Permission",
+      "role": "Role",
+      "user": "Users"
+    },
+    "dashboard": "Dashboard",
+    "user_manager": "User Manager"
+  },
+  "profile": {
+    "activity": "Activity",
+    "faq": "FAQ",
+    "messages": "Messages",
+    "my_profile": "My Profile",
+    "support": "Support"
+  }
+}
