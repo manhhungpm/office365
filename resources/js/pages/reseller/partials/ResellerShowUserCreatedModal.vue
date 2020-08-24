@@ -56,10 +56,11 @@
             },
             onModalHidden() {
                 this.resellerId = null;
-                this.modalShown = false;
             },
-            onModalShown() {
+            async onModalShown() {
                 this.modalShown = true;
+                await this.$nextTick();
+                this.$refs.table.reload();
             },
         }
     }

@@ -227,6 +227,16 @@ class MSUserRepository extends BaseRepository
                 ], $account->access_token, 'POST', true);
 
                 if ($data != RESPONSE_ERROR) {
+
+                    //Cập nhật số user đã tạo của reseller
+                    if (isset($idReseller)) {
+                        $reseller = User::find($idReseller);
+                        if ($reseller) {
+                            $reseller->num_user_created++;
+                            $reseller->save();
+                        }
+                    }
+
                     $code = StudentCode::where('code', $arr['code'])->first();
 
                     $result = json_decode($data);
