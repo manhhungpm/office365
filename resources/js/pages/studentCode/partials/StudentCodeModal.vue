@@ -5,12 +5,12 @@
         <form class="m-form m-form--state m-form--label-align-right"
               @submit.prevent="validateForm">
             <form-control
-                    v-if="isEdit"
-                    label="Mã bảo mật"
-                    data-vv-as="Mã bảo mật"
-                    name="code"
-                    v-model="form.code"
-                    :is-disabled="isEdit"
+                v-if="isEdit"
+                label="Mã bảo mật"
+                data-vv-as="Mã bảo mật"
+                name="code"
+                v-model="form.code"
+                :is-disabled="isEdit"
             />
 
             <reseller-chosen v-model="form.reseller"
@@ -61,127 +61,128 @@
 </template>
 
 <script>
-  import Form from 'vform'
-  import moment from 'moment'
-  import { mapGetters } from 'vuex'
-  import { ROLE_RESELLER } from '~/constants/roles'
-  import cloneDeep from 'lodash/cloneDeep'
-  import { SUCCESS } from '~/constants/code'
-  import { notify, notifyTryAgain, notifyUpdateSuccess, notifyAddSuccess } from '~/helpers/bootstrap-notify'
+    import Form from 'vform'
+    import moment from 'moment'
+    import {mapGetters} from 'vuex'
+    import {ROLE_RESELLER} from '~/constants/roles'
+    import cloneDeep from 'lodash/cloneDeep'
+    import {SUCCESS} from '~/constants/code'
+    import {notify, notifyTryAgain, notifyUpdateSuccess, notifyAddSuccess} from '~/helpers/bootstrap-notify'
 
-  const defaultStudentCode = {
-    max_user: 1,
-    reseller: null,
-    domain: null,
-    expired_date: null
-  }
-
-  export default {
-    name: 'StudentCodeModal',
-    props: {
-      onActionSuccess: {
-        type: Function,
-        default: () => {
-        }
-      }
-    },
-    data() {
-      return {
-        form: new Form(defaultStudentCode),
-        isEdit: false
-      }
-    },
-    computed: {
-      ...mapGetters({
-        role: 'auth/role',
-        user: 'auth/user'
-      }),
-      isReseller() {
-        return this.role == ROLE_RESELLER
-      }
-    },
-    methods: {
-      validateForm() {
-        this.$validator.validateAll().then((result) => {
-          if (result) {
-            if (this.isEdit) {
-              this.updateItem()
-            } else {
-              this.addItem()
-            }
-          }
-        })
-      },
-      async show(item = null) {
-        if (item != null) {
-          this.form = new Form(item)
-          await this.$nextTick()
-          this.form.domain = cloneDeep(item.domain)
-          this.form.expired_date = item.expired_date ? moment(item.expired_date, 'YYYY-MM-DD').format('DD/MM/YYYY') : null
-          this.isEdit = true
-        }
-        if (this.isReseller) {
-          this.form.reseller = this.user
-        }
-        this.$refs.modal.show()
-      },
-      hide() {
-        $(this.$el).modal('hide')
-      },
-      onModalHidden() {
-        this.form = new Form(defaultStudentCode)
-        this.isEdit = false
-        this.$validator.reset()
-      },
-      async addItem() {
-        try {
-          this.form.domain_id = this.form.domain.domain_id
-          this.form.reseller_id = this.form.reseller ? this.form.reseller.id : null
-
-          const { data } = await this.form.post('/api/student-code/store')
-
-          if (data.code == SUCCESS) {
-            notifyAddSuccess('mã bảo mật')
-            this.$refs.modal.hide()
-            this.onActionSuccess()
-          } else {
-            notifyTryAgain()
-          }
-        } catch (e) {
-          const { status } = e.response
-
-          if (status != 422) {
-            notifyTryAgain()
-          }
-        }
-      },
-      async updateItem() {
-        try {
-          this.form.domain_id = this.form.domain.domain_id
-          this.form.reseller_id = this.form.reseller ? this.form.reseller.id : null
-
-          const { data } = await this.form.post('/api/student-code/edit')
-
-          if (data.code == SUCCESS) {
-            notifyUpdateSuccess('mã bảo mật')
-            this.$refs.modal.hide()
-            this.onActionSuccess()
-          } else {
-            notifyTryAgain()
-          }
-        } catch (e) {
-          const { status } = e.response
-
-          if (status != 422) {
-            notifyTryAgain()
-          }
-        }
-      }
-    },
-    watch: {
-      'form.reseller'(val) {
-        this.form.domain = null
-      }
+    const defaultStudentCode = {
+        max_user: 1,
+        reseller: null,
+        domain: null,
+        expired_date: null
     }
-  }
+
+    export default {
+        name: 'StudentCodeModal',
+        props: {
+            onActionSuccess: {
+                type: Function,
+                default: () => {
+                }
+            }
+        },
+        data() {
+            return {
+                form: new Form(defaultStudentCode),
+                isEdit: false
+            }
+        },
+        computed: {
+            ...mapGetters({
+                role: 'auth/role',
+                user: 'auth/user'
+            }),
+            isReseller() {
+                return this.role == ROLE_RESELLER
+            }
+        },
+        methods: {
+            validateForm() {
+                this.$validator.validateAll().then((result) => {
+                    if (result) {
+                        if (this.isEdit) {
+                            this.updateItem()
+                        } else {
+                            this.addItem()
+                        }
+                    }
+                })
+            },
+            async show(item = null) {
+                if (item != null) {
+                    this.form = new Form(item)
+                    await this.$nextTick()
+                    this.form.domain = cloneDeep(item.domain)
+                    this.form.expired_date = item.expired_date ? moment(item.expired_date, 'YYYY-MM-DD').format('DD/MM/YYYY') : null
+                    this.isEdit = true
+                } else {
+                    if (this.isReseller) {
+                        this.form.reseller = this.user
+                    }
+                }
+                this.$refs.modal.show()
+            },
+            hide() {
+                $(this.$el).modal('hide')
+            },
+            onModalHidden() {
+                this.form = new Form(defaultStudentCode)
+                this.isEdit = false
+                this.$validator.reset()
+            },
+            async addItem() {
+                try {
+                    this.form.domain_id = this.form.domain.domain_id
+                    this.form.reseller_id = this.form.reseller ? this.form.reseller.id : null
+
+                    const {data} = await this.form.post('/api/student-code/store')
+
+                    if (data.code == SUCCESS) {
+                        notifyAddSuccess('mã bảo mật')
+                        this.$refs.modal.hide()
+                        this.onActionSuccess()
+                    } else {
+                        notifyTryAgain()
+                    }
+                } catch (e) {
+                    const {status} = e.response
+
+                    if (status != 422) {
+                        notifyTryAgain()
+                    }
+                }
+            },
+            async updateItem() {
+                try {
+                    this.form.domain_id = this.form.domain.domain_id
+                    this.form.reseller_id = this.form.reseller ? this.form.reseller.id : null
+
+                    const {data} = await this.form.post('/api/student-code/edit')
+
+                    if (data.code == SUCCESS) {
+                        notifyUpdateSuccess('mã bảo mật')
+                        this.$refs.modal.hide()
+                        this.onActionSuccess()
+                    } else {
+                        notifyTryAgain()
+                    }
+                } catch (e) {
+                    const {status} = e.response
+
+                    if (status != 422) {
+                        notifyTryAgain()
+                    }
+                }
+            }
+        },
+        watch: {
+            'form.reseller'(val) {
+                this.form.domain = null
+            }
+        }
+    }
 </script>

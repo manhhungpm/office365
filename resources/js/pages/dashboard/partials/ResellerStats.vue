@@ -84,7 +84,7 @@
     },
     computed: {
       totalUsed() {
-        return parseInt(this.stats.totalCodeUsed,10) + parseInt(this.stats.reseller.num_user_created,10)
+        return parseInt(this.stats.totalCodeMax,10) + parseInt(this.stats.reseller.num_user_created,10)
       }
     },
     mounted() {
