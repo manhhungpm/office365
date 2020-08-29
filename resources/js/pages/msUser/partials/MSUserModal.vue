@@ -17,7 +17,7 @@
                 <div class="col-md-6">
                     <domain-chosen :required="true"
                                    :multiple="false"
-                                   :post-data="{isVerified: 1}"
+                                   :post-data="{isVerified: 1,reseller:this.$store.getters['auth/user'].id}"
                                    v-validate="'required'"
                                    v-model="form.domain"
                                    :error="errors.first('domain') || form.errors.get('domain')"/>
@@ -72,7 +72,9 @@
                              :error="errors.first('reseller') || form.errors.get('reseller_id')"
             />
             <template v-else>
-                <div class="form-control-feedback text-danger" v-if="form.errors.get('reseller_id')">{{form.errors.get('reseller_id')}}</div>
+                <div class="form-control-feedback text-danger" v-if="form.errors.get('reseller_id')">
+                    {{form.errors.get('reseller_id')}}
+                </div>
             </template>
 
 
@@ -88,132 +90,132 @@
 </template>
 
 <script>
-  import Form from 'vform'
+    import Form from 'vform'
 
-  import { SUCCESS } from '~/constants/code'
-  import { notify, notifyTryAgain, notifyUpdateSuccess, notifyAddSuccess } from '~/helpers/bootstrap-notify'
-  import DomainChosen from '../../../components/elements/DomainChosen'
-  import ResellerChosen from '../../../components/elements/ResellerChosen'
+    import {SUCCESS} from '~/constants/code'
+    import {notify, notifyTryAgain, notifyUpdateSuccess, notifyAddSuccess} from '~/helpers/bootstrap-notify'
+    import DomainChosen from '../../../components/elements/DomainChosen'
+    import ResellerChosen from '../../../components/elements/ResellerChosen'
 
-  const defaultMSUser = {
-    displayName: '',
-    username: '',
-    domain: null,
-    password: '',
-    accountEnabled: true,
-    reseller: null
-  }
-
-  export default {
-    components: { ResellerChosen },
-    name: 'MSUserModal',
-    props: {
-      center: {
-        type: Boolean,
-        default: false
-      },
-      onActionSuccess: {
-        type: Function,
-        default: () => {
-        }
-      }
-    },
-    data() {
-      return {
-        isEdit: false,
-        form: new Form(defaultMSUser)
-      }
-    },
-    computed: {
-      isAdmin(){
-        return this.$store.getters['auth/role'] === 'Admin'
-      }
-    },
-    methods: {
-      validateForm() {
-        this.$validator.validateAll().then((result) => {
-          if (result) {
-            if (this.isEdit) {
-              this.updateItem()
-            } else {
-              this.addItem()
-            }
-          }
-        })
-      },
-      show(item = null) {
-        if (item != null) {
-          this.$validator.detach('password')
-
-          this.$nextTick(() => {
-            let clone = Object.assign({}, item)
-            let arr = clone.userPrincipalName.split('@')
-            clone.username = arr[0]
-
-            this.form = new Form(clone)
-            this.isEdit = true
-          })
-        }
-
-        this.$refs.modal.show()
-      },
-      hide() {
-        $(this.$el).modal('hide')
-      },
-
-      onModalHidden() {
-        this.form = new Form(defaultMSUser)
-        this.isEdit = false
-        this.$validator.reset()
-      },
-      async addItem() {
-        try {
-          this.form.userPrincipalName = this.form.username + '@' + this.form.domain.id
-          this.form.domain_id = this.form.domain.domain_id
-          if(this.form.reseller) {
-            this.form.reseller_id = this.form.reseller.id
-          } else {
-            this.form.reseller_id = this.$store.getters['auth/user'].id
-          }
-          const { data } = await this.form.post('/api/ms-user/store')
-
-          if (data.code == SUCCESS) {
-            notifyAddSuccess('người dùng')
-            this.$refs.modal.hide()
-            this.onActionSuccess()
-          } else {
-            notifyTryAgain()
-          }
-        } catch (e) {
-          const { status } = e.response
-
-          if (status != 422) {
-            notifyTryAgain()
-          }
-        }
-      },
-      async updateItem() {
-        try {
-          this.form.userPrincipalName = this.form.username + '@' + this.form.domain.id
-          this.form.domain_id = this.form.domain.domain_id
-          const { data } = await this.form.post('/api/ms-user/edit')
-
-          if (data.code == SUCCESS) {
-            notifyUpdateSuccess('người dùng')
-            this.$refs.modal.hide()
-            this.onActionSuccess()
-          } else {
-            notifyTryAgain()
-          }
-        } catch (e) {
-          const { status } = e.response
-
-          if (status != 422) {
-            notifyTryAgain()
-          }
-        }
-
-      }
+    const defaultMSUser = {
+        displayName: '',
+        username: '',
+        domain: null,
+        password: '',
+        accountEnabled: true,
+        reseller: null
     }
-  }
+
+    export default {
+        components: {ResellerChosen},
+        name: 'MSUserModal',
+        props: {
+            center: {
+                type: Boolean,
+                default: false
+            },
+            onActionSuccess: {
+                type: Function,
+                default: () => {
+                }
+            }
+        },
+        data() {
+            return {
+                isEdit: false,
+                form: new Form(defaultMSUser)
+            }
+        },
+        computed: {
+            isAdmin() {
+                return this.$store.getters['auth/role'] === 'Admin'
+            }
+        },
+        methods: {
+            validateForm() {
+                this.$validator.validateAll().then((result) => {
+                    if (result) {
+                        if (this.isEdit) {
+                            this.updateItem()
+                        } else {
+                            this.addItem()
+                        }
+                    }
+                })
+            },
+            show(item = null) {
+                if (item != null) {
+                    this.$validator.detach('password')
+
+                    this.$nextTick(() => {
+                        let clone = Object.assign({}, item)
+                        let arr = clone.userPrincipalName.split('@')
+                        clone.username = arr[0]
+
+                        this.form = new Form(clone)
+                        this.isEdit = true
+                    })
+                }
+
+                this.$refs.modal.show()
+            },
+            hide() {
+                $(this.$el).modal('hide')
+            },
+
+            onModalHidden() {
+                this.form = new Form(defaultMSUser)
+                this.isEdit = false
+                this.$validator.reset()
+            },
+            async addItem() {
+                try {
+                    this.form.userPrincipalName = this.form.username + '@' + this.form.domain.id
+                    this.form.domain_id = this.form.domain.domain_id
+                    if (this.form.reseller) {
+                        this.form.reseller_id = this.form.reseller.id
+                    } else {
+                        this.form.reseller_id = this.$store.getters['auth/user'].id
+                    }
+                    const {data} = await this.form.post('/api/ms-user/store')
+
+                    if (data.code == SUCCESS) {
+                        notifyAddSuccess('người dùng')
+                        this.$refs.modal.hide()
+                        this.onActionSuccess()
+                    } else {
+                        notifyTryAgain()
+                    }
+                } catch (e) {
+                    const {status} = e.response
+
+                    if (status != 422) {
+                        notifyTryAgain()
+                    }
+                }
+            },
+            async updateItem() {
+                try {
+                    this.form.userPrincipalName = this.form.username + '@' + this.form.domain.id
+                    this.form.domain_id = this.form.domain.domain_id
+                    const {data} = await this.form.post('/api/ms-user/edit')
+
+                    if (data.code == SUCCESS) {
+                        notifyUpdateSuccess('người dùng')
+                        this.$refs.modal.hide()
+                        this.onActionSuccess()
+                    } else {
+                        notifyTryAgain()
+                    }
+                } catch (e) {
+                    const {status} = e.response
+
+                    if (status != 422) {
+                        notifyTryAgain()
+                    }
+                }
+
+            }
+        }
+    }
 </script>

@@ -42,7 +42,7 @@ class MSUserRepository extends BaseRepository
         }
         if (!$counting) {
             $query->select('ms_user_id', 'displayName', 'givenName', 'surname', 'userPrincipalName',
-                'code', 'mail', 'domain_id', 'account_id', 'createdDateTime', 'accountEnabled', 'user_id','id');
+                'code', 'mail', 'domain_id', 'account_id', 'createdDateTime', 'accountEnabled', 'user_id', 'id');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
@@ -204,7 +204,7 @@ class MSUserRepository extends BaseRepository
     {
         //Detect Reseller
         $codeRsl = $arr['code'];
-        $idReseller = StudentCode::select('user_id')->where('code',$codeRsl)->get()->toArray()[0]['user_id'];
+        $idReseller = StudentCode::select('user_id')->where('code', $codeRsl)->get()->toArray()[0]['user_id'];
 
         $domainId = $arr['domain_id'];
         $domain = Domain::find($domainId);
@@ -274,6 +274,11 @@ class MSUserRepository extends BaseRepository
         }
 
         return false;
+    }
+
+    public function updatePassword($arr)
+    {
+        dd($arr);
     }
 
 }

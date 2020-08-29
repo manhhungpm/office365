@@ -102,4 +102,10 @@ class MSUserController extends Controller
             'total' => $total
         ]);
     }
+
+    public function updatePassword(Request $request)
+    {
+        $result = $this->msUserRepository->updatePassword($request->only('id', 'password'));
+        return processCommonResponse($result);
+    }
 }

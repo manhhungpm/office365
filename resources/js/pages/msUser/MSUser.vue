@@ -17,6 +17,8 @@
         </the-portlet>
 
         <account-modal ref="modal" :on-action-success="updateItemSuccess"/>
+        <m-s-user-renew-password-modal ref="renewPasswordModal"
+                                       :on-action-success="updateItemSuccess"></m-s-user-renew-password-modal>
     </div>
 </template>
 
@@ -29,10 +31,12 @@
     import {notify, notifyTryAgain, notifyDeleteSuccess, notifyUpdateSuccess} from '~/helpers/bootstrap-notify'
 
     import MSUserModal from './partials/MSUserModal'
+    import MSUserRenewPasswordModal from "./partials/MSUserRenewPasswordModal";
 
     Vue.component('account-modal', MSUserModal)
 
     const vm = {
+        components: {MSUserRenewPasswordModal},
         layout: 'default',
         middleware: 'auth',
         metaInfo() {
@@ -93,7 +97,8 @@
                     width: '15%',
                     render() {
                         return generateTableAction('edit', 'showDetail') +
-                            generateTableAction('delete', 'deleteItem')
+                            generateTableAction('delete', 'deleteItem') +
+                            generateTableAction('renewpassword', 'renewPassword', 'warning', 'la-lock', 'Đổi mật khẩu')
                     }
                 }
             ],
@@ -103,6 +108,9 @@
             this.handleEvents()
         },
         methods: {
+            renewPassword(table, rowData) {
+                this.$refs.renewPasswordModal.show(rowData);
+            },
             setTable(table) {
                 this.table = table
             },
@@ -182,6 +190,11 @@
                         type: 'click',
                         name: 'deleteItem',
                         action: this.deleteItem
+                    },
+                    {
+                        type: 'click',
+                        name: 'renewPassword',
+                        action: this.renewPassword
                     }
                 ]
             }

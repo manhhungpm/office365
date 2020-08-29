@@ -72,6 +72,7 @@ class DomainController extends Controller
 
     public function listAll(Request $request)
     {
+//        dd($request->input('reseller'));
         $length = 10;
 
         $page = $request->input('page');

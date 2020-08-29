@@ -40,7 +40,7 @@ class StoreStudentCodeRequest extends FormRequest
                         $codesMax = $reseller->codes()->get()->sum('max_user');
                         $usedUsersTotal = $codesMax + $reseller->num_user_created;
                         if ($value + $usedUsersTotal > $reseller->num_user_max) {
-                            $limit = $reseller->num_user_max - $usedUsersTotal;
+                            $limit = $reseller->num_user_max - $usedUsersTotal <= 0 ? 0 : $reseller->num_user_max - $usedUsersTotal;
                             $fail("Reseller đã sử dụng {$usedUsersTotal}/{$reseller->num_user_max} tài khoản." .
                                 " Số tài khoản tối đa cho mã này là {$limit}");
                         }
@@ -51,8 +51,8 @@ class StoreStudentCodeRequest extends FormRequest
             ],
             'expired_date' => [
                 'required',
-                function($attribute, $value, $fail) {
-                    if( Carbon::createFromFormat('d/m/Y', $value)->startOfDay()->lessThan(Carbon::tomorrow()->startOfDay()) ) {
+                function ($attribute, $value, $fail) {
+                    if (Carbon::createFromFormat('d/m/Y', $value)->startOfDay()->lessThan(Carbon::tomorrow()->startOfDay())) {
                         $fail('Ngày hết hạn phải sau hôm nay');
                     }
                 }

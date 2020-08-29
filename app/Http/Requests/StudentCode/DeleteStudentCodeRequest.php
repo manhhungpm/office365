@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Requests\StudentCode;
 
+use App\Models\StudentCode;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DeleteStudentCodeRequest extends FormRequest
@@ -23,7 +25,17 @@ class DeleteStudentCodeRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required',
+            'id' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    //Check status trc khi xóa
+                    $isActive = StudentCode::where('id',$value)->where('status',STUDENT_STATUS_ACTIVE)->exists();
+//                    dd($isActive);
+                    if ($isActive) {
+                        return $fail('Không thể xóa vì tài khoản đã có user sử dụng');
+                    }
+                }
+            ]
         ];
     }
 }
