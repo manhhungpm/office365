@@ -105,7 +105,7 @@ class MSUserController extends Controller
 
     public function updatePassword(Request $request)
     {
-        $result = $this->msUserRepository->updatePassword($request->only('id', 'password'));
+        $result = $this->msUserRepository->updatePassword($request->only('ms_user_id', 'password'));
         return processCommonResponse($result);
     }
 }

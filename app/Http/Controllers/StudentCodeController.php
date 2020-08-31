@@ -46,7 +46,7 @@ class StudentCodeController extends Controller
 
     public function delete(DeleteStudentCodeRequest $request)
     {
-        $result = $this->studentCodeRepository->deleteById($request->input('id'));
+        $result = $this->studentCodeRepository->deleteStudentCode($request->input('id'));
 
         return processCommonResponse($result);
     }

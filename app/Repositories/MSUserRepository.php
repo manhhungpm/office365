@@ -278,7 +278,29 @@ class MSUserRepository extends BaseRepository
 
     public function updatePassword($arr)
     {
-        dd($arr);
+        $ms_user = $this->model->with('account:id,access_token')->find($arr['ms_user_id']);
+
+        if ($ms_user != null) {
+            try {
+                $api = sendRequest(API_USER . '/' . $ms_user->id, [
+                    'passwordProfile' => [
+                        'forceChangePasswordNextSignIn' => false,
+                        'password' => $arr['password']
+                    ]
+                ], $ms_user->account->access_token, 'PATCH', true);
+
+                if ($api != RESPONSE_ERROR) {
+                    $ms_user->fill($arr);
+
+                    if ($ms_user->save()) {
+                        return true;
+                    }
+                }
+            } catch (QueryException $exception) {
+                throw new \App\Exceptions\QueryException();
+            }
+        }
+        return false;
     }
 
 }

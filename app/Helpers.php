@@ -76,15 +76,18 @@ function getDataTableRequestParams($request)
 function processCommonResponse($result, $data = null)
 {
     $code = null;
-    if ($result === true){
+    if ($result === true) {
         $code = CODE_SUCCESS;
-    }else if ($result === false){
+    } else if ($result === false) {
         $code = CODE_ERROR;
-    }else if ($result === CODE_ERROR_DELETE_USER_WHEN_HAVE_USER_CREATED_AND_STUDENT_CODE){
+    } else if ($result === CODE_ERROR_DELETE_USER_WHEN_HAVE_USER_CREATED_AND_STUDENT_CODE) {
         $code = CODE_ERROR_DELETE_USER_WHEN_HAVE_USER_CREATED_AND_STUDENT_CODE;
+    } else if ($result === CODE_ERROR_DELETE_STUDENT_CODE_WHEN_HAVE_STATUS_ACTIVE) {
+        $code = CODE_ERROR_DELETE_STUDENT_CODE_WHEN_HAVE_STATUS_ACTIVE;
     } else {
         $code = CODE_SUCCESS;
     }
+
     return response()->json(array(
         'code' => $code,
         'message' => $result ? MESSAGE_SUCCESS : MESSAGE_ERROR,

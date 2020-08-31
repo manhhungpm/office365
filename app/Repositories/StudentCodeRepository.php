@@ -165,4 +165,18 @@ class StudentCodeRepository extends BaseRepository
 
         return false;
     }
+
+    public function deleteStudentCode($id)
+    {
+        $isActive = StudentCode::where('id', $id)->where('status', STUDENT_STATUS_ACTIVE)->exists();
+
+        if ($isActive) {
+            return CODE_ERROR_DELETE_STUDENT_CODE_WHEN_HAVE_STATUS_ACTIVE;
+        } else {
+            if ($this->model->find($id)->delete()) {
+                return CODE_SUCCESS;
+            }
+            return CODE_ERROR;
+        }
+    }
 }

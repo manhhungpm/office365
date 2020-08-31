@@ -72,6 +72,8 @@
                                 if (data.code == 0) {
                                     notifyDeleteSuccess('MSSV')
                                     reloadIntelligently($this.$refs.table)
+                                } else if (data.code == 4) {
+                                    notify("Thông báo", "Không thể xóa mã vì có tồn tại người dùng sử dụng mã này")
                                 } else {
                                     notifyTryAgain()
                                 }
