@@ -200,8 +200,6 @@ class UserRepository extends BaseRepository
 
     public function getListUserCreated($resellerId = null, $keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'id', $orderType = 'asc')
     {
-//        dd($resellerId);
-
         $query = MSUser::select('id', 'displayName', 'givenName', 'mail', 'mobilePhone', 'userPrincipalName',
             'account_id', 'domain_id', 'sync_at', 'state', 'userType',
             'createdDateTime', 'surname', 'accountEnabled', 'user_id')

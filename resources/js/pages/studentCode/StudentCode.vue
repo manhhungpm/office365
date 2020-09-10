@@ -16,6 +16,7 @@
         </the-portlet>
 
         <student-code-modal ref="modal" :on-action-success="updateItemSuccess"/>
+        <student-code-show-user-created-modal ref="showUserCreatedModal"></student-code-show-user-created-modal>
     </div>
 </template>
 
@@ -29,9 +30,10 @@
     import StudentCodeModal from './partials/StudentCodeModal'
     import {ROLE_ADMIN} from '~/constants/roles'
     import * as studentCodeStatus from '~/constants/studentCodeStatus'
+    import StudentCodeShowUserCreatedModal from "./partials/StudentCodeShowUserCreatedModal";
 
     const vm = {
-        components: {StudentCodeModal},
+        components: {StudentCodeShowUserCreatedModal, StudentCodeModal},
         layout: 'default',
         middleware: 'auth',
         metaInfo() {
@@ -119,6 +121,9 @@
                         notifyTryAgain()
                     }
                 })
+            },
+            showUserCreated(table, rowData){
+                this.$refs.showUserCreatedModal.show(rowData);
             }
         },
         computed: {
@@ -198,7 +203,8 @@
                         className: 'text-center',
                         width: '15%',
                         render() {
-                            return generateTableAction('edit', 'editItem') + generateTableAction('delete', 'deleteItem')
+                            return generateTableAction('edit', 'editItem') + generateTableAction('delete', 'deleteItem') +
+                                generateTableAction('showUserCreated', 'showUserCreated', 'info', 'la-list', 'Xem User đã tạo')
                         }
                     }
                 ]
@@ -214,6 +220,11 @@
                         type: 'click',
                         name: 'deleteItem',
                         action: this.deleteItem
+                    },
+                    {
+                        type: 'click',
+                        name: 'showUserCreated',
+                        action: this.showUserCreated
                     }
                 ]
             }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\MSUser;
 use App\Models\StudentCode;
 use App\User;
 use Carbon\Carbon;
@@ -118,6 +119,11 @@ class StudentCodeRepository extends BaseRepository
      */
     public function store($arr)
     {
+        //Thoi gian het han mac dinh la 01-01-2099
+        if (empty($arr['expired_date'])) {
+            $arr['expired_date'] = "01/01/2099";
+        }
+
         $domainId = $arr['domain_id'];
 
         $resellerId = $arr['reseller_id'];
@@ -178,5 +184,28 @@ class StudentCodeRepository extends BaseRepository
             }
             return CODE_ERROR;
         }
+    }
+
+    public function getListUserCreated($code = null, $keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'id', $orderType = 'asc')
+    {
+        $query = MSUser::select('id', 'displayName', 'givenName', 'mail', 'mobilePhone', 'userPrincipalName',
+            'account_id', 'domain_id', 'sync_at', 'state', 'userType',
+            'createdDateTime', 'surname', 'accountEnabled', 'user_id')
+            ->where('code', $code);
+
+        if (!$counting) {
+            if ($limit > 0) {
+                $query->skip($offset)
+                    ->take($limit);
+            }
+
+            if ($orderBy != null && $orderType != null) {
+                $query->orderBy($orderBy, $orderType);
+            }
+        } else {
+            return $query->count();
+        }
+
+        return $query->get();
     }
 }

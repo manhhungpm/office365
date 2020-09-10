@@ -45,7 +45,7 @@ class UpdateStudentCodeRequest extends FormRequest
                     $reseller_id = $this->reseller_id ? $this->reseller_id : auth()->id();
                     $reseller = User::find($reseller_id);
                     if ($reseller) {
-                        $codesMax = $reseller->codes()->where('id','<>',$this->id)->get()->sum('max_user');
+                        $codesMax = $reseller->codes()->where('id', '<>', $this->id)->get()->sum('max_user');
                         $usedUsersTotal = $codesMax + $reseller->num_user_created;
                         if ($value + $usedUsersTotal > $reseller->num_user_max) {
                             $limit = $reseller->num_user_max - $usedUsersTotal;
@@ -58,11 +58,13 @@ class UpdateStudentCodeRequest extends FormRequest
                 }
             ],
             'expired_date' => [
-                'required',
-                function($attribute, $value, $fail) {
-                    if( Carbon::createFromFormat('d/m/Y', $value)->startOfDay()->lessThan(Carbon::tomorrow()->startOfDay()) ) {
-                        $fail('Ngày hết hạn phải sau hôm nay');
+                function ($attribute, $value, $fail) {
+                    if (isset($value)) {
+                        if (Carbon::createFromFormat('d/m/Y', $value)->startOfDay()->lessThan(Carbon::tomorrow()->startOfDay())) {
+                            $fail('Ngày hết hạn phải sau hôm nay');
+                        }
                     }
+
                 }
             ],
             'domain_id' => 'required',

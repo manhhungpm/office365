@@ -50,10 +50,11 @@ class StoreStudentCodeRequest extends FormRequest
                 }
             ],
             'expired_date' => [
-                'required',
                 function ($attribute, $value, $fail) {
-                    if (Carbon::createFromFormat('d/m/Y', $value)->startOfDay()->lessThan(Carbon::tomorrow()->startOfDay())) {
-                        $fail('Ngày hết hạn phải sau hôm nay');
+                    if (isset($value)) {
+                        if (Carbon::createFromFormat('d/m/Y', $value)->startOfDay()->lessThan(Carbon::tomorrow()->startOfDay())) {
+                            $fail('Ngày hết hạn phải sau hôm nay');
+                        }
                     }
                 }
             ],

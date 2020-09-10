@@ -92,4 +92,32 @@ class StudentCodeController extends Controller
             'total' => $total
         ]);
     }
+
+    public function listingUserCreated(Request $request)
+    {
+        $params = getDataTableRequestParams($request);
+
+        $total = $this->studentCodeRepository->getListUserCreated(
+            $request->input('code'),
+            $params['keyword'],
+            true
+        );
+
+        $arr = array(
+            'recordsTotal' => $total,
+            'data' => $this->studentCodeRepository->getListUserCreated(
+                $request->input('code'),
+                $params['keyword'],
+                false,
+                $params['length'],
+                $params['start'],
+                $params['orderBy'],
+                $params['orderType']
+            ),
+            'draw' => $params['draw'],
+            'recordsFiltered' => $total
+        );
+
+        return response()->json($arr);
+    }
 }

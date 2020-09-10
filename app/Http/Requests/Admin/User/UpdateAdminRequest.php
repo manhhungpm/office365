@@ -54,6 +54,10 @@ class UpdateAdminRequest extends FormRequest
                         return $fail('Số người dùng cho phép phải lớn hơn số User đã tạo');
                     }
                 },
+            ],
+            'code' => [
+                'required',
+                Rule::unique('users', 'code')->ignore($this->input('id'))
             ]
         ];
     }
@@ -68,6 +72,7 @@ class UpdateAdminRequest extends FormRequest
             'name' => trans('fields.user_name'),
             'display_name' => trans('fields.user_display_name'),
             'email' => trans('fields.user_description'),
+            'code' => "Mã Reseller"
         ];
     }
 }

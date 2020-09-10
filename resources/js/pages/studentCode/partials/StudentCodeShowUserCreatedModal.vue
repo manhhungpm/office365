@@ -9,8 +9,8 @@
             v-if="modalShown"
             ref="table"
             :columns="columns"
-            :url="'/api/admin/user/listing-user-created'"
-            :post-data="{reseller_id: resellerId}"
+            :url="'/api/student-code/listing-user-created'"
+            :post-data="{code: code}"
             :searching="false"
         />
     </the-modal>
@@ -20,41 +20,41 @@
     import TheModal from "../../../components/common/TheModal";
 
     export default {
-        name: "ResellerShowUserCreatedModal",
+        name: "StudentCodeShowUserCreatedModal",
         components: { TheModal},
         data() {
             return {
-                resellerId: null,
+                code: null,
                 modalShown: false,
             }
         },
         computed: {
-          columns(){
-            return [
-                {
-                    data: 'userPrincipalName',
-                    title: 'Principal Name',
-                },
-                {
-                    data: 'displayName',
-                    title: 'Tên hiển thị',
-                },
-                {
-                    data: 'id',
-                    title: 'License',
-                }
-            ]
-          }
+            columns(){
+                return [
+                    {
+                        data: 'userPrincipalName',
+                        title: 'Principal Name',
+                    },
+                    {
+                        data: 'displayName',
+                        title: 'Tên hiển thị',
+                    },
+                    {
+                        data: 'id',
+                        title: 'License',
+                    }
+                ]
+            }
         },
         methods: {
             show(item = null) {
                 if (item != null) {
-                    this.resellerId = item.id;
+                    this.code = item.code;
                 }
                 this.$refs.showUserCreatedModal.show();
             },
             onModalHidden() {
-                this.resellerId = null;
+                this.code = null;
             },
             async onModalShown() {
                 this.modalShown = true;

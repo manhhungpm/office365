@@ -288,6 +288,7 @@ class MSUserRepository extends BaseRepository
                         'password' => $arr['password']
                     ]
                 ], $ms_user->account->access_token, 'PATCH', true);
+                dd($api);
 
                 if ($api != RESPONSE_ERROR) {
                     $ms_user->fill($arr);

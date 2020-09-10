@@ -6,4 +6,5 @@ Route::group(['prefix' => '/student-code', 'as' => 'studentCode.'], function () 
     Route::post('edit', 'StudentCodeController@edit')->name('edit');
     Route::post('delete', 'StudentCodeController@delete')->name('delete');
     Route::post('list-all', 'StudentCodeController@listAll')->name('list-all');
+    Route::post('listing-user-created', 'StudentCodeController@listingUserCreated')->name('listing-user-created');
 });

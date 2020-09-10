@@ -46,7 +46,7 @@
             columns: [
                 {
                     data: 'userPrincipalName',
-                    title: 'Principal Name'
+                    title: 'Tên người dùng'
                 },
                 {
                     data: 'displayName',
@@ -87,6 +87,16 @@
                 {
                     data: 'createdDateTime',
                     title: 'Thời gian tạo'
+                },
+                {
+                    data: 'code',
+                    title: 'Tạo bằng mã',
+                    render(data){
+                        if(data){
+                            return data
+                        }
+                        return "Không được tạo bằng mã"
+                    }
                 },
                 {
                     data: null,
