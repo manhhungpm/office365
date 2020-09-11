@@ -152,4 +152,10 @@ class UserController extends Controller
 
         return response()->json($arr);
     }
+
+    public function increaseMaxUser(Request $request){
+        $result = $this->userRepository->increaseMaxUser($request->input('id'));
+
+        return processCommonResponse($result);
+    }
 }

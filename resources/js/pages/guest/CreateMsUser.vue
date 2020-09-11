@@ -86,7 +86,7 @@
                         </template>
                         <template v-else>
                             <div class="form-group m-form__group">
-                                <div class="text-danger">Mã bảo mật không hợp lệ</div>
+                                <div class="text-danger">Mã bảo mật hết hạn hoặc quá số người dùng cho phép tạo</div>
                             </div>
                         </template>
                     </template>

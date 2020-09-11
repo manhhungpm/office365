@@ -25,7 +25,7 @@
 <script>
     import bootbox from 'bootbox'
     import axios from 'axios'
-    import {API_USER_LISTING, API_USER_DELETE} from '~/constants/url'
+    import {API_USER_LISTING, API_USER_DELETE, API_USER_INCREASE_MAX_USER} from '~/constants/url'
     import {generateTableAction, htmlEscapeEntities} from '~/helpers/tableHelper'
     import {notify, notifyTryAgain, notifyDeleteSuccess} from '~/helpers/bootstrap-notify'
     import {PASSWORD_REGEX, USER_NAME_REGEX} from '~/constants/regex'
@@ -100,7 +100,8 @@
                         return generateTableAction('edit', 'showDetail') +
                             generateTableAction('delete', 'deleteItem') +
                             generateTableAction('renewpassword', 'renewPassword', 'warning', 'la-lock', 'Đổi mật khẩu') +
-                            generateTableAction('showUserCreated', 'showUserCreated', 'info', 'la-list', 'Xem User đã tạo')
+                            generateTableAction('showUserCreated', 'showUserCreated', 'info', 'la-list', 'Xem User đã tạo') +
+                            generateTableAction('increaseMaxUser', 'increaseMaxUser', 'accent', 'la-plus', 'Tăng thêm số User')
 
                     }
                 }
@@ -139,8 +140,8 @@
                                 notifyDeleteSuccess($this.$t('form.user.user'))
 
                                 $this.$refs.table.reload()
-                            } else if (data.code == 3){
-                                notify('Thông báo','Không thể xóa vì Reseller đang có User được tạo hoặc mã bảo mật')
+                            } else if (data.code == 3) {
+                                notify('Thông báo', 'Không thể xóa vì Reseller đang có User được tạo hoặc mã bảo mật')
                             } else {
                                 notifyTryAgain()
                             }
@@ -157,8 +158,23 @@
             renewPassword(table, rowData) {
                 this.$refs.renewPasswordModal.show(rowData);
             },
-            showUserCreated(table, rowData){
+            showUserCreated(table, rowData) {
                 this.$refs.showUserCreatedModal.show(rowData);
+            },
+            async increaseMaxUser(table, rowData) {
+                let $this = this
+
+                let res = await axios.post(API_USER_INCREASE_MAX_USER, {id: rowData.id})
+                const {data} = res
+
+                if (data.code == 0) {
+                    notify("Thông báo","Tăng số lượng User thành công","success")
+
+                    $this.$refs.table.reload()
+                }  else {
+                    notifyTryAgain()
+                }
+
             }
         },
         computed: {
@@ -183,6 +199,11 @@
                         type: 'click',
                         name: 'showUserCreated',
                         action: this.showUserCreated
+                    },
+                    {
+                        type: 'click',
+                        name: 'increaseMaxUser',
+                        action: this.increaseMaxUser
                     }
                 ]
             }

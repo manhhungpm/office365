@@ -124,11 +124,11 @@ class UserRepository extends BaseRepository
     public function deleteUser($id)
     {
         //Check xem co dang tao User nao ko
-        $isHaveUserCreated = $this->model->select('num_user_created')->where('id',$id)->get()->toArray()[0]['num_user_created'];
+        $isHaveUserCreated = $this->model->select('num_user_created')->where('id', $id)->get()->toArray()[0]['num_user_created'];
         //Check xem co dang tao Student code nao ko
-        $isHaveStudentCode = StudentCode::where('user_id',$id)->exists();
+        $isHaveStudentCode = StudentCode::where('user_id', $id)->exists();
 
-        if ($isHaveUserCreated == 0 && $isHaveStudentCode == false){
+        if ($isHaveUserCreated == 0 && $isHaveStudentCode == false) {
             $user = $this->model->find($id);
 
             if ($user != null) {
@@ -140,7 +140,7 @@ class UserRepository extends BaseRepository
                     return false;
                 }
             }
-        }else {
+        } else {
             return CODE_ERROR_DELETE_USER_WHEN_HAVE_USER_CREATED_AND_STUDENT_CODE;
         }
     }
@@ -203,7 +203,7 @@ class UserRepository extends BaseRepository
         $query = MSUser::select('id', 'displayName', 'givenName', 'mail', 'mobilePhone', 'userPrincipalName',
             'account_id', 'domain_id', 'sync_at', 'state', 'userType',
             'createdDateTime', 'surname', 'accountEnabled', 'user_id')
-            ->where('user_id',$resellerId);
+            ->where('user_id', $resellerId);
 
         if (!$counting) {
             if ($limit > 0) {
@@ -219,5 +219,16 @@ class UserRepository extends BaseRepository
         }
 
         return $query->get();
+    }
+
+    public function increaseMaxUser($id)
+    {
+        $currentNumMaxUser = $this->model->select('num_user_max')->where('id', $id)->get()->toArray()[0]['num_user_max'];
+
+        $result = $this->model->where('id', $id)->update([
+            'num_user_max' => $currentNumMaxUser + 1
+        ]);
+
+        return $result;
     }
 }

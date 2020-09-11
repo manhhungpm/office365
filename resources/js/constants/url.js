@@ -42,6 +42,7 @@ export const API_USER_UPDATE_PASSWORD = '/api/admin/user/update-password'
 export const API_USER_UPDATE_PROFILE = '/api/admin/user/update-profile'
 export const API_USER_CHANGE_PASSWORD = '/api/admin/user/change-password'
 export const API_USER_GET_ROLE_LIST = '/api/admin/user/get-role-list'
+export const API_USER_INCREASE_MAX_USER = '/api/admin/user/increase-max-user'
 
 /*
  |--------------------------------------------------------------------------

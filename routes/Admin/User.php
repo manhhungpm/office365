@@ -12,4 +12,5 @@ Route::group(['prefix' => '/user', 'as' => 'user.'], function () {
     Route::post('listing-all', 'UserController@listingAll')->name('listing-all');
     Route::post('listing-reseller', 'UserController@listingReseller')->name('listing-reseller');
     Route::post('listing-user-created', 'UserController@listingUserCreated')->name('listing-user-created');
+    Route::post('increase-max-user', 'UserController@increaseMaxUser')->name('increase-max-user');
 });
