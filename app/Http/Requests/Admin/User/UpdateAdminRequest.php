@@ -49,9 +49,17 @@ class UpdateAdminRequest extends FormRequest
             ],
             'num_user_max' => [
                 function ($attribute, $value, $fail) {
+                    //Lấy ra số max user của mã bảo mật
+                    $reseller = User::find($this->input('id'));
+                    $totalCodeMax = (int)$reseller->codes()->sum('max_user');
+
+                    //Lấy ra số User đã tạo
                     $numUserCreated = User::select('num_user_created')->where('id', $this->input('id'))->get()->toArray()[0]['num_user_created'];
-                    if ($value < $numUserCreated) {
-                        return $fail('Số người dùng cho phép phải lớn hơn số User đã tạo');
+
+                    $total = $totalCodeMax + $numUserCreated;
+
+                    if ($value < $total) {
+                        return $fail('Số người dùng cho phép phải lớn hơn Tổng số User đã tạo và số User cho phép của mã bảo mật');
                     }
                 },
             ],
