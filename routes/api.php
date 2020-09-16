@@ -18,7 +18,7 @@ Route::post('/student-code/check', 'StudentCodeController@check')->name('student
 Route::post('/ms-user/guest-store', 'MSUserController@guestStore')->name('msUser.guest-create')->middleware('throttle:10,1');
 
 Route::group([
-    'middleware' => ['api', 'auth:api']
+    'middleware' => ['api', 'auth:api','check_status']
 ], function () {
 
     includeRouteFiles(__DIR__ . '/Auth/');

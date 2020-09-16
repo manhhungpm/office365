@@ -76,9 +76,9 @@ class UserRepository extends BaseRepository
         if ($user != null) {
             $user->fill($arr);
             if ($user->save()) {
-                if ($arr['domains'] != null && is_array($arr['domains'])) {
+                if ($arr['domain'] != null && is_array($arr['domain'])) {
                     $user->domains()->detach();
-                    $user->domains()->attach($arr['domains']);
+                    $user->domains()->attach($arr['domain']);
                 }
 
                 fireEventActionLog(UPDATE, $this->model->getTable(), $user->id, $user->name, $oldUser, json_encode($user));
@@ -102,8 +102,8 @@ class UserRepository extends BaseRepository
             $user->fill($arr);
             $user->password = Hash::make($arr['password']);
             if ($user->save()) {
-                if ($arr['domains'] != null && count($arr['domains']) > 0) {
-                    $user->domains()->attach($arr['domains']);
+                if ($arr['domain'] != null && count($arr['domain']) > 0) {
+                    $user->domains()->attach($arr['domain']);
                 }
 
                 if ($role != null) {

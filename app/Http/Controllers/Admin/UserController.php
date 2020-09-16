@@ -28,7 +28,7 @@ class UserController extends Controller
     public function store(StoreAdminRequest $request)
     {
         $result = $this->userRepository->store($request->only('name', 'display_name', 'email', 'password',
-            'role', 'phone', 'num_user_max', 'status', 'domains', 'code', 'note'));
+            'role', 'phone', 'num_user_max', 'status', 'domain', 'code', 'note'));
 
         return processCommonResponse($result);
     }
@@ -36,7 +36,7 @@ class UserController extends Controller
     public function edit(UpdateAdminRequest $request)
     {
         $result = $this->userRepository->edit($request->only('id', 'name', 'display_name', 'description',
-            'phone', 'num_user_max', 'status', 'domains', 'code', 'note'));
+            'phone', 'num_user_max', 'status', 'domain', 'code', 'note'));
 
         return processCommonResponse($result);
     }

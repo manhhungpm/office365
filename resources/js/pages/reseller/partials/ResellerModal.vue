@@ -177,7 +177,7 @@
                         return e.domain_id;
                     })
 
-                    this.form.domains = arrDomain;
+                    this.form.domain = arrDomain;
 
                     const {data} = await this.form.post(API_USER_STORE)
 
@@ -202,7 +202,7 @@
                         return e.domain_id;
                     })
 
-                    this.form.domains = arrDomain;
+                    this.form.domain = arrDomain;
 
                     const {data} = await this.form.post(API_USER_EDIT)
 
