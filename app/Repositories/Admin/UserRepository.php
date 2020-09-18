@@ -221,12 +221,12 @@ class UserRepository extends BaseRepository
         return $query->get();
     }
 
-    public function increaseMaxUser($id)
+    public function increaseMaxUser($arr)
     {
-        $currentNumMaxUser = $this->model->select('num_user_max')->where('id', $id)->get()->toArray()[0]['num_user_max'];
+        $currentNumMaxUser = $this->model->select('num_user_max')->where('id', $arr['id_item'])->get()->toArray()[0]['num_user_max'];
 
-        $result = $this->model->where('id', $id)->update([
-            'num_user_max' => $currentNumMaxUser + 1
+        $result = $this->model->where('id', $arr['id_item'])->update([
+            'num_user_max' => $currentNumMaxUser + $arr['num_user_max']
         ]);
 
         return $result;

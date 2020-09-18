@@ -56,11 +56,12 @@ class UserController extends Controller
 
     public function changePassword(ChangePasswordRequest $request)
     {
-        $result = $this->userRepository->changePassword($request->only('password','current_password'));
+        $result = $this->userRepository->changePassword($request->only('password', 'current_password'));
         return processCommonResponse($result);
     }
 
-    public function updateProfile(Request $request){
+    public function updateProfile(Request $request)
+    {
         $result = $this->userRepository->updateProfile($request->only('id', 'display_name', 'email', 'phone'));
         return processCommonResponse($result);
     }
@@ -153,8 +154,9 @@ class UserController extends Controller
         return response()->json($arr);
     }
 
-    public function increaseMaxUser(Request $request){
-        $result = $this->userRepository->increaseMaxUser($request->input('id'));
+    public function increaseMaxUser(Request $request)
+    {
+        $result = $this->userRepository->increaseMaxUser($request->only('id_item', 'num_user_max'));
 
         return processCommonResponse($result);
     }

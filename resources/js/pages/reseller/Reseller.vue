@@ -19,6 +19,7 @@
         <reseller-renew-password-modal ref="renewPasswordModal"
                                        :on-action-success="updateItemSuccess"/>
         <reseller-show-user-created-modal ref="showUserCreatedModal"/>
+        <reseller-increase-max-user-modal ref="increaseMaxUserModal" :on-action-success="updateItemSuccess"/>
     </div>
 </template>
 
@@ -33,9 +34,13 @@
     import ResellerModal from './partials/ResellerModal'
     import ResellerRenewPasswordModal from "./partials/ResellerRenewPasswordModal";
     import ResellerShowUserCreatedModal from "./partials/ResellerShowUserCreatedModal";
+    import ResellerIncreaseMaxUserModal from "./partials/ResellerIncreaseMaxUserModal";
 
     const vm = {
-        components: {ResellerShowUserCreatedModal, ResellerRenewPasswordModal, ResellerModal},
+        components: {
+            ResellerIncreaseMaxUserModal,
+            ResellerShowUserCreatedModal, ResellerRenewPasswordModal, ResellerModal
+        },
         layout: 'default',
         middleware: 'auth',
         metaInfo() {
@@ -162,19 +167,19 @@
                 this.$refs.showUserCreatedModal.show(rowData);
             },
             async increaseMaxUser(table, rowData) {
-                let $this = this
-
-                let res = await axios.post(API_USER_INCREASE_MAX_USER, {id: rowData.id})
-                const {data} = res
-
-                if (data.code == 0) {
-                    notify("Thông báo","Tăng số lượng User thành công","success")
-
-                    $this.$refs.table.reload()
-                }  else {
-                    notifyTryAgain()
-                }
-
+                // let $this = this
+                //
+                // let res = await axios.post(API_USER_INCREASE_MAX_USER, {id: rowData.id})
+                // const {data} = res
+                //
+                // if (data.code == 0) {
+                //     notify("Thông báo","Tăng số lượng User thành công","success")
+                //
+                //     $this.$refs.table.reload()
+                // }  else {
+                //     notifyTryAgain()
+                // }
+                this.$refs.increaseMaxUserModal.show(rowData);
             }
         },
         computed: {
