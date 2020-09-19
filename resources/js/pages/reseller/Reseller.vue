@@ -26,9 +26,15 @@
 <script>
     import bootbox from 'bootbox'
     import axios from 'axios'
-    import {API_USER_LISTING, API_USER_DELETE, API_USER_INCREASE_MAX_USER} from '~/constants/url'
+    import {
+        API_USER_LISTING,
+        API_USER_DELETE,
+        API_USER_CHECK_USER_BEFORE_DELETE,
+        API_USER_EDIT,
+        API_USER_UPDATE_STATUS_USER
+    } from '~/constants/url'
     import {generateTableAction, htmlEscapeEntities} from '~/helpers/tableHelper'
-    import {notify, notifyTryAgain, notifyDeleteSuccess} from '~/helpers/bootstrap-notify'
+    import {notify, notifyTryAgain, notifyDeleteSuccess, notifyUpdateSuccess} from '~/helpers/bootstrap-notify'
     import {PASSWORD_REGEX, USER_NAME_REGEX} from '~/constants/regex'
     import {customRule} from '~/helpers/customRule'
     import ResellerModal from './partials/ResellerModal'
@@ -122,37 +128,79 @@
             showDetailModal(table, rowData) {
                 this.$refs.renewPasswordModal.show(rowData)
             },
-            deleteItem(table, rowData) {
-                let $this = this
+            async deleteItem(table, rowData) {
 
-                bootbox.confirm({
-                    title: this.$t('alert.notice'),
-                    message: this.$t('form.user.delete_confirm', [htmlEscapeEntities(rowData.name)]),
-                    buttons: {
-                        cancel: {
-                            label: this.$t('button.cancel')
-                        },
-                        confirm: {
-                            label: this.$t('button.ok')
-                        }
-                    },
-                    callback: async function (result) {
-                        if (result) {
-                            let res = await axios.post(API_USER_DELETE, {id: rowData.id})
-                            const {data} = res
+                if (rowData.id) {
 
-                            if (data.code == 0) {
-                                notifyDeleteSuccess($this.$t('form.user.user'))
+                    //Check xem co xoa dc ko
+                    let res = await axios.post(API_USER_CHECK_USER_BEFORE_DELETE, {id: rowData.id})
 
-                                $this.$refs.table.reload()
-                            } else if (data.code == 3) {
-                                notify('Thông báo', 'Không thể xóa vì Reseller đang có User được tạo hoặc mã bảo mật')
-                            } else {
-                                notifyTryAgain()
+                    const {data} = res
+
+                    if (data.code == 3) {
+                        //Khong xoa dc thi disable
+                        let $this = this
+
+                        bootbox.confirm({
+                            title: this.$t('alert.notice'),
+                            message: "Không thể xóa người dùng. Bạn có muốn Disable người dùng không ?",
+                            buttons: {
+                                cancel: {
+                                    label: this.$t('button.cancel')
+                                },
+                                confirm: {
+                                    label: this.$t('button.ok')
+                                }
+                            },
+                            callback: async function (result) {
+                                if (result) {
+                                    let res = await axios.post(API_USER_UPDATE_STATUS_USER, {
+                                        id: rowData.id,
+                                    })
+                                    const {data} = res
+
+                                    if (data.code == 0) {
+                                        notifyUpdateSuccess($this.$t('form.user.user'))
+
+                                        $this.$refs.table.reload()
+                                    } else {
+                                        notifyTryAgain()
+                                    }
+                                }
                             }
-                        }
+                        })
+
+                    } else {
+                        let $this = this
+
+                        bootbox.confirm({
+                            title: this.$t('alert.notice'),
+                            message: this.$t('form.user.delete_confirm', [htmlEscapeEntities(rowData.name)]),
+                            buttons: {
+                                cancel: {
+                                    label: this.$t('button.cancel')
+                                },
+                                confirm: {
+                                    label: this.$t('button.ok')
+                                }
+                            },
+                            callback: async function (result) {
+                                if (result) {
+                                    let res = await axios.post(API_USER_DELETE, {id: rowData.id})
+                                    const {data} = res
+
+                                    if (data.code == 0) {
+                                        notifyDeleteSuccess($this.$t('form.user.user'))
+
+                                        $this.$refs.table.reload()
+                                    } else {
+                                        notifyTryAgain()
+                                    }
+                                }
+                            }
+                        })
                     }
-                })
+                }
             },
             updateItemSuccess() {
                 this.$refs.table.reload()

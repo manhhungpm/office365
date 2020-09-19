@@ -70,7 +70,6 @@ class UserRepository extends BaseRepository
      */
     public function edit($arr)
     {
-//        dd($arr);
         $user = $this->model->find($arr['id']);
         $oldUser = json_encode($user);
         if ($user != null) {
@@ -123,25 +122,16 @@ class UserRepository extends BaseRepository
      */
     public function deleteUser($id)
     {
-        //Check xem co dang tao User nao ko
-        $isHaveUserCreated = $this->model->select('num_user_created')->where('id', $id)->get()->toArray()[0]['num_user_created'];
-        //Check xem co dang tao Student code nao ko
-        $isHaveStudentCode = StudentCode::where('user_id', $id)->exists();
+        $user = $this->model->find($id);
 
-        if ($isHaveUserCreated == 0 && $isHaveStudentCode == false) {
-            $user = $this->model->find($id);
-
-            if ($user != null) {
-                $user->roles()->detach();
-                if ($this->model->where('id', $id)->delete()) {
-                    fireEventActionLog(DELETE, $this->model->getTable(), $user->id, $user->name, json_encode($user), null);
-                    return true;
-                } else {
-                    return false;
-                }
+        if ($user != null) {
+            $user->roles()->detach();
+            if ($this->model->where('id', $id)->delete()) {
+                fireEventActionLog(DELETE, $this->model->getTable(), $user->id, $user->name, json_encode($user), null);
+                return true;
+            } else {
+                return false;
             }
-        } else {
-            return CODE_ERROR_DELETE_USER_WHEN_HAVE_USER_CREATED_AND_STUDENT_CODE;
         }
     }
 
@@ -227,6 +217,31 @@ class UserRepository extends BaseRepository
 
         $result = $this->model->where('id', $arr['id_item'])->update([
             'num_user_max' => $currentNumMaxUser + $arr['num_user_max']
+        ]);
+
+        return $result;
+    }
+
+    public function checkUserBeforeDelete($arr)
+    {
+        $id = $arr['id'];
+
+        //Check xem co dang tao User nao ko
+        $isHaveUserCreated = $this->model->select('num_user_created')->where('id', $id)->get()->toArray()[0]['num_user_created'];
+        //Check xem co dang tao Student code nao ko
+        $isHaveStudentCode = StudentCode::where('user_id', $id)->exists();
+
+        if ($isHaveUserCreated != 0 || $isHaveStudentCode == true) {
+            return CODE_ERROR_DELETE_USER_WHEN_HAVE_USER_CREATED_AND_STUDENT_CODE;
+        }
+    }
+
+    public function updateStatusUser($arr)
+    {
+        $id = $arr['id'];
+
+        $result = $this->model->where('id',$id)->update([
+            'status' => 0
         ]);
 
         return $result;

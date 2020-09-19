@@ -160,4 +160,18 @@ class UserController extends Controller
 
         return processCommonResponse($result);
     }
+
+    public function checkUserBeforeDelete(Request $request)
+    {
+        $result = $this->userRepository->checkUserBeforeDelete($request->only('id'));
+
+        return processCommonResponse($result);
+    }
+
+    public function updateStatusUser(Request $request)
+    {
+        $result = $this->userRepository->updateStatusUser($request->only('id'));
+
+        return processCommonResponse($result);
+    }
 }

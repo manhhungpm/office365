@@ -10,7 +10,7 @@
             @submit.prevent="validateForm"
         >
             <form-control
-                v-model="form.domain"
+                v-model="form.userPrincipalName"
                 :label="'Principal Name'"
                 :data-vv-as="'Principal Name'"
                 :is-disabled="true"

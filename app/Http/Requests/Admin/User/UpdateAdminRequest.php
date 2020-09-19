@@ -59,7 +59,7 @@ class UpdateAdminRequest extends FormRequest
                     $total = $totalCodeMax + $numUserCreated;
 
                     if ($value < $total) {
-                        return $fail('Số người dùng cho phép phải lớn hơn Tổng số User đã tạo và số User cho phép của mã bảo mật');
+                        return $fail('Số người dùng cho phép phải lớn hơn ' . $total);
                     }
                 },
             ],
