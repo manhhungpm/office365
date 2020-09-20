@@ -29,6 +29,8 @@ class StudentCodeRepository extends BaseRepository
      */
     public function getList($keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
     {
+        $this->setStatusUnused();
+
         $query = $this->model
             ->where('code', 'LIKE', "%$keyword%");
         if (auth()->user()->hasRole(ROLE_RESELLER)) {
@@ -207,5 +209,13 @@ class StudentCodeRepository extends BaseRepository
         }
 
         return $query->get();
+    }
+
+    public function setStatusUnused()
+    {
+        //Set status = 0 khi chua co user su dung
+        $this->model->where('used_number', 0)->update([
+            'status' => 0
+        ]);
     }
 }
