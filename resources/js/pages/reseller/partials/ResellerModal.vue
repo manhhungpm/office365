@@ -68,8 +68,8 @@
                           v-validate="'max:25'"
                           :error="errors.first('phone') || form.errors.get('phone')"/>
 
-            <form-control label="Số người dùng cho phép"
-                          data-vv-as="Số người dùng cho phép"
+            <form-control label="Số credit"
+                          data-vv-as="Số credit"
                           name="num_user_max"
                           :required="true"
                           type="number"
