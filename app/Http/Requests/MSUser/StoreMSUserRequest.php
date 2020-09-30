@@ -37,7 +37,7 @@ class StoreMSUserRequest extends FormRequest
                         $codesMax = $reseller->codes()->get()->sum('max_user');
                         $usedUsersTotal = $codesMax + $reseller->num_user_created;
                         if ($usedUsersTotal >= $reseller->num_user_max) {
-                            $fail("Reseller đã sử dụng {$usedUsersTotal}/{$reseller->num_user_max} tài khoản.");
+                            $fail("Reseller đã sử dụng {$usedUsersTotal}/{$reseller->num_user_max} credits.");
                         }
                     } else {
                         $fail('Reseller hiện đang có lỗi, vui lòng thử lại sau');

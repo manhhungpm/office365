@@ -23,19 +23,19 @@
                                 {{stats.codes.length}}
                             </div>
                             <div class="col-5">
-                                Tổng số credit đã nạp:
+                                Tổng số credits được phép dùng:
                             </div>
                             <div class="col-7">
                                 {{stats.reseller.num_user_max}}
                             </div>
                             <div class="col-5">
-                                Tổng số credit đã sử dụng:
+                                Tổng số credits đã sử dụng:
                             </div>
                             <div class="col-7">
                                 {{totalUsed}}
                             </div>
                             <div class="col-5">
-                                Tổng số credit còn lại:
+                                Tổng số credits còn lại:
                             </div>
                             <div class="col-7">
                                 {{stats.reseller.num_user_max - totalUsed}}

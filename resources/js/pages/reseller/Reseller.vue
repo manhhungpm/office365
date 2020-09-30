@@ -84,7 +84,7 @@
                 },
                 {
                     data: 'num_user_max',
-                    title: 'Max user'
+                    title: 'Credits'
                 },
                 {
                     data: 'num_user_created',

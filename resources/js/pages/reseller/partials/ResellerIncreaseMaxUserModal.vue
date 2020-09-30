@@ -1,12 +1,12 @@
 <template>
-    <the-modal ref="modal" :title="'Tăng số lượng Max User'"
+    <the-modal ref="modal" :title="'Tăng số lượng Credits'"
                :onHidden="onModalHidden">
         <form class="m-form m-form--fit m-form--state m-form--label-align-right" ref="form"
               autocomplete="off"
               @submit.prevent="validateForm">
 
-            <form-control label="Số người dùng muốn thêm"
-                          data-vv-as="Số người dùng muốn thêm"
+            <form-control label="Số credits muốn thêm"
+                          data-vv-as="Số credits muốn thêm"
                           name="num_user_max"
                           type="number"
                           v-model="form.num_user_max"
@@ -17,7 +17,7 @@
         <template slot="footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ $t('button.cancel')}}</button>
             <button type="button" class="btn btn-primary" @click="validateForm">
-                {{ $t('button.add')}}
+                Thêm
             </button>
         </template>
     </the-modal>
@@ -70,7 +70,7 @@
                     const {data} = await this.form.post(API_USER_INCREASE_MAX_USER)
 
                     if (data.code == SUCCESS) {
-                        notify("Thông báo","Tăng số lượng User thành công","success")
+                        notify("Thông báo","Tăng số lượng Credits thành công","success")
                         this.$refs.modal.hide()
                         this.onActionSuccess()
                     } else {

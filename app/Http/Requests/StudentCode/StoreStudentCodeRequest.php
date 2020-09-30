@@ -41,8 +41,8 @@ class StoreStudentCodeRequest extends FormRequest
                         $usedUsersTotal = $codesMax + $reseller->num_user_created;
                         if ($value + $usedUsersTotal > $reseller->num_user_max) {
                             $limit = $reseller->num_user_max - $usedUsersTotal <= 0 ? 0 : $reseller->num_user_max - $usedUsersTotal;
-                            $fail("Reseller đã sử dụng {$usedUsersTotal}/{$reseller->num_user_max} tài khoản." .
-                                " Số tài khoản tối đa cho mã này là {$limit}");
+                            $fail("Reseller đã sử dụng {$usedUsersTotal}/{$reseller->num_user_max} credits." .
+                                " Số credits còn lại là {$limit}");
                         }
                     } else {
                         $fail('Reseller hiện đang có lỗi, vui lòng thử lại sau');
