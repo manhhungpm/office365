@@ -10,34 +10,34 @@
                     </div>
                     <div class="card-body pt-4">
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-md-5">
                                 Số user đã tạo:
                             </div>
-                            <div class="col-7">
+                            <div class="col-md-7">
                                 {{stats.reseller.num_user_created}}
                             </div>
-                            <div class="col-5">
+                            <div class="col-md-5">
                                 Số mã bảo mật đã tạo:
                             </div>
-                            <div class="col-7">
+                            <div class="col-md-7">
                                 {{stats.codes.length}}
                             </div>
-                            <div class="col-5">
+                            <div class="col-md-5">
                                 Tổng số credits được phép dùng:
                             </div>
-                            <div class="col-7">
+                            <div class="col-md-7">
                                 {{stats.reseller.num_user_max}}
                             </div>
-                            <div class="col-5">
+                            <div class="col-md-5">
                                 Tổng số credits đã sử dụng:
                             </div>
-                            <div class="col-7">
+                            <div class="col-md-7">
                                 {{totalUsed}}
                             </div>
-                            <div class="col-5">
+                            <div class="col-md-5">
                                 Tổng số credits còn lại:
                             </div>
-                            <div class="col-7">
+                            <div class="col-md-7">
                                 {{stats.reseller.num_user_max - totalUsed}}
                             </div>
                         </div>
@@ -90,7 +90,7 @@
     },
     computed: {
       totalUsed() {
-        return parseInt(this.stats.totalCodeMax,10) + parseInt(this.stats.reseller.num_user_created,10)
+        return parseInt(this.stats.totalCodeMax,10) + parseInt(this.stats.totalCreateByHand,10)
       }
     },
     mounted() {

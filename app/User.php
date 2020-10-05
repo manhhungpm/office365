@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Domain;
+use App\Models\MSUser;
 use App\Models\StudentCode;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -60,5 +61,10 @@ class User extends Authenticatable implements JWTSubject
     public function codes()
     {
         return $this->hasMany(StudentCode::class);
+    }
+
+    public function msUser()
+    {
+        return $this->hasMany(MSUser::class,'user_id','id');
     }
 }

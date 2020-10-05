@@ -32,7 +32,7 @@ class StudentCodeController extends Controller
 
     public function edit(UpdateStudentCodeRequest $request)
     {
-        $result = $this->studentCodeRepository->edit($request->only('id','max_user', 'expired_date'));
+        $result = $this->studentCodeRepository->edit($request->only('code', 'id', 'max_user', 'expired_date'));
 
         return processCommonResponse($result);
     }

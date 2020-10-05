@@ -23,8 +23,9 @@ class DashboardRepository extends BaseRepository
             return [
                 'reseller' => $reseller,
                 'codes' => $reseller->codes()->get(),
-                'totalCodeUsed' => $reseller->codes()->sum('used_number'),
-                'totalCodeMax' => $reseller->codes()->sum('max_user')
+                'totalCodeUsed' => $reseller->codes()->sum('used_number'), //So user su dung ma bao mat nay
+                'totalCodeMax' => $reseller->codes()->sum('max_user'), //So user toi da cho phep dc tao boi ma bao mat nay
+                'totalCreateByHand' => $reseller->msUser()->where('user_id',auth()->id())->where('code','=',null)->count()
             ];
         } else {
             return false;

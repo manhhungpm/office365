@@ -54,12 +54,15 @@ class UpdateAdminRequest extends FormRequest
                     $totalCodeMax = (int)$reseller->codes()->sum('max_user');
 
                     //Lấy ra số User đã tạo
-                    $numUserCreated = User::select('num_user_created')->where('id', $this->input('id'))->get()->toArray()[0]['num_user_created'];
+                    //$numUserCreated = User::select('num_user_created')->where('id', $this->input('id'))->get()->toArray()[0]['num_user_created'];
 
-                    $total = $totalCodeMax + $numUserCreated;
+                    //Số user tạo bằng tay chứ ko phải dùng mã
+                    $totalCreateByHand = $reseller->msUser()->where('user_id',$this->input('id'))->where('code','=',null)->count();
+
+                    $total = $totalCodeMax + $totalCreateByHand;
 
                     if ($value < $total) {
-                        return $fail('Số người dùng cho phép phải lớn hơn ' . $total);
+                        return $fail('Số credits phải lớn hơn ' . $total);
                     }
                 },
             ],

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\StudentCode;
 
+use App\Models\MSUser;
 use App\Models\StudentCode;
 use App\User;
 use Carbon\Carbon;
@@ -45,13 +46,29 @@ class UpdateStudentCodeRequest extends FormRequest
                     $reseller_id = $this->reseller_id ? $this->reseller_id : auth()->id();
                     $reseller = User::find($reseller_id);
                     if ($reseller) {
-                        $codesMax = $reseller->codes()->where('id', '<>', $this->id)->get()->sum('max_user');
-                        $usedUsersTotal = $codesMax + $reseller->num_user_created;
-                        if ($value + $usedUsersTotal > $reseller->num_user_max) {
-                            $limit = $reseller->num_user_max - $usedUsersTotal;
-                            $fail("Reseller đã sử dụng {$usedUsersTotal}/{$reseller->num_user_max} credits." .
-                                " Số credits còn lại là {$limit}");
+//                        $codesMax = $reseller->codes()->where('id', '<>', $this->id)->get()->sum('max_user');
+//                        $usedUsersTotal = $codesMax + $reseller->num_user_created;
+//                        if ($value + $usedUsersTotal > $reseller->num_user_max) {
+//                            $limit = $reseller->num_user_max - $usedUsersTotal;
+//                            $fail("Reseller đã sử dụng {$usedUsersTotal}/{$reseller->num_user_max} credits." .
+//                                " Số credits còn lại là {$limit}");
+//                        }
+
+                        //----new
+                        $code = $this->input('code');
+
+                        //Tổng số user đã tạo bằng mã đó
+                        $totalUserUseThisCode = MSUser::where('code',$code)->get()->count();
+
+                        //Tổng số credits còn lại : $totalCreditRest
+                        $totalMaxUser = $reseller->num_user_max;
+                        $totalCodeMax = (int)$reseller->codes()->sum('max_user'); //So user toi da cho phep dc tao boi ma bao mat nay
+                        $totalCreateByHand = $reseller->msUser()->where('user_id',$reseller_id)->where('code','=',null)->count();
+                        $totalCreditRest = $totalMaxUser- ($totalCodeMax + $totalCreateByHand);
+                        if ($value < $totalUserUseThisCode || $value>($totalUserUseThisCode+$totalCreditRest)){
+                            return $fail("Số User của mã bảo mật phải >= " . $totalUserUseThisCode ." và <= " . ($totalUserUseThisCode+$totalCreditRest));
                         }
+                        //-----
                     } else {
                         $fail('Reseller hiện đang có lỗi, vui lòng thử lại sau');
                     }
