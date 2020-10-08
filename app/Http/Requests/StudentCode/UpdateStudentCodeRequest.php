@@ -55,18 +55,22 @@ class UpdateStudentCodeRequest extends FormRequest
 //                        }
 
                         //----new
-                        $code = $this->input('code');
+                        $codeName = $this->input('code');
 
                         //Tổng số user đã tạo bằng mã đó
-                        $totalUserUseThisCode = MSUser::where('code',$code)->get()->count();
+                        $totalUserUseThisCode = MSUser::where('code',$code->code)->get()->count();
 
                         //Tổng số credits còn lại : $totalCreditRest
                         $totalMaxUser = $reseller->num_user_max;
                         $totalCodeMax = (int)$reseller->codes()->sum('max_user'); //So user toi da cho phep dc tao boi ma bao mat nay
                         $totalCreateByHand = $reseller->msUser()->where('user_id',$reseller_id)->where('code','=',null)->count();
                         $totalCreditRest = $totalMaxUser- ($totalCodeMax + $totalCreateByHand);
-                        if ($value < $totalUserUseThisCode || $value>($totalUserUseThisCode+$totalCreditRest)){
-                            return $fail("Số User của mã bảo mật phải >= " . $totalUserUseThisCode ." và <= " . ($totalUserUseThisCode+$totalCreditRest));
+
+                        //Max user trc
+                        $oldMaxUser = $code->max_user;
+
+                        if ($value < $totalUserUseThisCode || $value>($oldMaxUser+$totalCreditRest)){
+                            return $fail("Số User của mã bảo mật phải >= " . $totalUserUseThisCode ." và <= " . ($oldMaxUser+$totalCreditRest));
                         }
                         //-----
                     } else {
