@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <template v-if="stats">
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="card card-custom card-stretch card-stretch-half gutter-b">
                     <div class="card-header align-items-center border-0">
                         <h3 class="card-title align-items-start flex-column">
@@ -44,7 +44,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-md-8">
                 <div class="card card-custom card-stretch card-stretch-half gutter-b">
                     <div class="card-header align-items-center border-0 d-flex justify-content-between">
                         <h3 class="card-title align-items-start flex-column">
@@ -57,10 +57,17 @@
                             <div class="row mb-2"
                                  v-for="(code, index) in stats.codes"
                                  :key="index">
+<!--                                <div class="col-4 font-weight-bold">{{code.code}}</div>-->
+<!--                                <div class="col-4 text-danger" v-if="code.status == 2">Đã bị khóa</div>-->
+<!--                                <div class="col-4 text-success" v-else-if="code.status== 1">Đang sử dụng</div>-->
+<!--                                <div class="col-4 text-warning" v-else>Chưa sử dụng</div>-->
+<!--                                <div class="col-4 " :class="code.used_number < code.max_user ? 'text-success' : 'text-danger'">-->
+<!--                                    {{code.used_number}}/{{code.max_user}}-->
+<!--                                </div>-->
                                 <div class="col-4 font-weight-bold">{{code.code}}</div>
-                                <div class="col-4 text-danger" v-if="code.status == 2">Đã bị khóa</div>
-                                <div class="col-4 text-success" v-else-if="code.status== 1">Đang sử dụng</div>
-                                <div class="col-4 text-warning" v-else>Chưa sử dụng</div>
+                                <div class="col-4 text-success" v-if="code.used_number < code.max_user && code.used_number != 0">Đang sử dụng</div>
+                                <div class="col-4 text-warning" v-else-if="code.used_number < code.max_user && code.used_number == 0">Chưa sử dụng</div>
+                                <div class="col-4 text-danger" v-else>Đang sử dụng</div>
                                 <div class="col-4 " :class="code.used_number < code.max_user ? 'text-success' : 'text-danger'">
                                     {{code.used_number}}/{{code.max_user}}
                                 </div>
