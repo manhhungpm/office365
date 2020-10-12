@@ -174,4 +174,11 @@ class UserController extends Controller
 
         return processCommonResponse($result);
     }
+
+    public function changeStatus(Request $request)
+    {
+        $result = $this->userRepository->changeStatus($request->input('id'), $request->input('status'));
+
+        return processCommonResponse($result);
+    }
 }

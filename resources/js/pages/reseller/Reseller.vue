@@ -2,7 +2,7 @@
     <div>
         <the-portlet title="Danh sách Reseller">
             <data-table ref="table" :columns="columns" :url="listingUrl" :actions="actions" :fixed-columns-left="2"
-                        :post-data="{role: 'Reseller'}"/>
+                        :post-data="{role: 'Reseller'}" v-on:initial="setTable"/>
 
             <v-button color="primary" style-type="air"
                       class="m-btn--custom m-btn--icon"
@@ -90,14 +90,31 @@
                     data: 'num_user_created',
                     title: 'User đã tạo'
                 },
+                // {
+                //     data: 'status',
+                //     title: 'Trạng thái',
+                //     render(data) {
+                //         if (parseInt(data) == 1) {
+                //             return '<span class="text-success">Active</span>'
+                //         } else {
+                //             return '<span class="text-danger">Khóa</span>'
+                //         }
+                //     }
+                // },
                 {
                     data: 'status',
                     title: 'Trạng thái',
                     render(data) {
-                        if (parseInt(data) == 1) {
-                            return '<span class="text-success">Active</span>'
+                        if (parseInt(data) === 1) {
+                            return '<label class="m-checkbox m-checkbox--air m-checkbox--state-success">' +
+                                '<input type="checkbox" class="cb-status" checked> Active' +
+                                '<span></span>' +
+                                '</label>'
                         } else {
-                            return '<span class="text-danger">Khóa</span>'
+                            return '<label class="m-checkbox m-checkbox--air m-checkbox--state-success">' +
+                                '<input type="checkbox" class="cb-status"> Active' +
+                                '<span></span>' +
+                                '</label>'
                         }
                     }
                 },
@@ -116,12 +133,39 @@
 
                     }
                 }
-            ]
+            ],
+            table: null
         }),
         mounted() {
-
+            this.handleEvents()
         },
         methods: {
+            setTable(table) {
+                this.table = table
+            },
+            handleEvents() {
+                let table = this.table
+                let $this = this
+                $(this.$el).on('change', '.cb-status', async function () {
+                    let rowData = table.row($(this).parents('tr')).data()
+                    let status = rowData.status
+                    if (parseInt(status) === 0) {
+                        status = 1
+                    } else {
+                        status = 0
+                    }
+
+                    let res = await axios.post('/api/admin/user/change-status', {id: rowData.id, status: status})
+                    const {data} = res
+
+                    if (parseInt(data.code) === 0) {
+                        notifyUpdateSuccess('tài khoản')
+                        $this.$refs.table.reload()
+                    } else {
+                        notifyTryAgain()
+                    }
+                })
+            },
             showDetail(table, rowData) {
                 this.$refs.modal.show(rowData)
             },

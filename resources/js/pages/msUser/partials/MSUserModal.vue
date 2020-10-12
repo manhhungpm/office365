@@ -55,7 +55,7 @@
                           v-validate="'required|max:100'"
                           :error="errors.first('displayName') || form.errors.get('displayName')"/>
 
-            <div class="form-group m-form__group">
+            <div class="form-group m-form__group" v-if="!isEdit">
                 <label class="m-checkbox m-checkbox--state-success">
                     <input type="checkbox" v-model="form.accountEnabled"> Active
                     <span></span>

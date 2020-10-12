@@ -77,7 +77,7 @@
                           v-validate="'required|max_value:25'"
                           :error="errors.first('num_user_max') || form.errors.get('num_user_max')"/>
 
-            <div class="form-group m-form__group">
+            <div class="form-group m-form__group" v-if="!isEdit">
                 <label class="m-checkbox m-checkbox--state-success">
                     <input type="checkbox" v-model="form.status"> Active
                     <span></span>
@@ -119,7 +119,7 @@
         password_confirmation: '',
         role: 'Reseller',
         domains: null,
-        status: false,
+        status: true,
         code: ''
     }
 

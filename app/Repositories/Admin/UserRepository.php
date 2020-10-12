@@ -246,4 +246,21 @@ class UserRepository extends BaseRepository
 
         return $result;
     }
+
+    public function changeStatus($id, $status)
+    {
+        $account = $this->model->find($id);
+
+        if ($account != null) {
+            $account->status = $status;
+
+            if ($account->save()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
+    }
 }

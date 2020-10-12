@@ -74,14 +74,31 @@
                         return 'Code' + (row.code ? `: ${row.code}` : '')
                     }
                 },
+                // {
+                //     data: 'accountEnabled',
+                //     title: 'Trạng thái',
+                //     render(data) {
+                //         if (data) {
+                //             return '<span class="text-success">Đang hoạt động</span>'
+                //         }
+                //         return '<span class="text-danger">Khóa</span>'
+                //     }
+                // },
                 {
+                    title: 'Trang thai',
                     data: 'accountEnabled',
-                    title: 'Trạng thái',
                     render(data) {
-                        if (data) {
-                            return '<span class="text-success">Đang hoạt động</span>'
+                        if (parseInt(data) === 1) {
+                            return '<label class="m-checkbox m-checkbox--air m-checkbox--state-success">' +
+                                '<input type="checkbox" class="cb-status" checked> Active' +
+                                '<span></span>' +
+                                '</label>'
+                        } else {
+                            return '<label class="m-checkbox m-checkbox--air m-checkbox--state-success">' +
+                                '<input type="checkbox" class="cb-status"> Active' +
+                                '<span></span>' +
+                                '</label>'
                         }
-                        return '<span class="text-danger">Khóa</span>'
                     }
                 },
                 {
@@ -169,14 +186,14 @@
                 let $this = this
                 $(this.$el).on('change', '.cb-status', async function () {
                     let rowData = table.row($(this).parents('tr')).data()
-                    let status = rowData.status
+                    let status = rowData.accountEnabled
                     if (parseInt(status) === 0) {
                         status = 1
                     } else {
                         status = 0
                     }
 
-                    let res = await axios.post('/api/account/change-status', {id: rowData.ms_user_id, status: status})
+                    let res = await axios.post('/api/ms-user/change-status', {id: rowData.ms_user_id, status: status})
                     const {data} = res
 
                     if (parseInt(data.code) === 0) {

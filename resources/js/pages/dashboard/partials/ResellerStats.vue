@@ -57,20 +57,33 @@
                             <div class="row mb-2"
                                  v-for="(code, index) in stats.codes"
                                  :key="index">
-<!--                                <div class="col-4 font-weight-bold">{{code.code}}</div>-->
-<!--                                <div class="col-4 text-danger" v-if="code.status == 2">Đã bị khóa</div>-->
-<!--                                <div class="col-4 text-success" v-else-if="code.status== 1">Đang sử dụng</div>-->
-<!--                                <div class="col-4 text-warning" v-else>Chưa sử dụng</div>-->
-<!--                                <div class="col-4 " :class="code.used_number < code.max_user ? 'text-success' : 'text-danger'">-->
-<!--                                    {{code.used_number}}/{{code.max_user}}-->
-<!--                                </div>-->
+                                <!--                                <div class="col-4 font-weight-bold">{{code.code}}</div>-->
+                                <!--                                <div class="col-4 text-danger" v-if="code.status == 2">Đã bị khóa</div>-->
+                                <!--                                <div class="col-4 text-success" v-else-if="code.status== 1">Đang sử dụng</div>-->
+                                <!--                                <div class="col-4 text-warning" v-else>Chưa sử dụng</div>-->
+                                <!--                                <div class="col-4 " :class="code.used_number < code.max_user ? 'text-success' : 'text-danger'">-->
+                                <!--                                    {{code.used_number}}/{{code.max_user}}-->
+                                <!--                                </div>-->
                                 <div class="col-4 font-weight-bold">{{code.code}}</div>
-                                <div class="col-4 text-success" v-if="code.used_number < code.max_user && code.used_number != 0">Đang sử dụng</div>
-                                <div class="col-4 text-warning" v-else-if="code.used_number < code.max_user && code.used_number == 0">Chưa sử dụng</div>
+                                <div class="col-4 text-success"
+                                     v-if="code.used_number < code.max_user && code.used_number != 0">Đang sử dụng
+                                </div>
+                                <div class="col-4 text-warning"
+                                     v-else-if="code.used_number < code.max_user && code.used_number == 0">Chưa sử dụng
+                                </div>
                                 <div class="col-4 text-danger" v-else>Đang sử dụng</div>
-                                <div class="col-4 " :class="code.used_number < code.max_user ? 'text-success' : 'text-danger'">
+                                <!--                                <div class="col-4 " :class="code.used_number < code.max_user ? 'text-success' : 'text-danger'">-->
+                                <!--                                    {{code.used_number}}/{{code.max_user}}-->
+                                <!--                                </div>-->
+                                <div class="col-4 text-success"
+                                     v-if="code.used_number < code.max_user && code.used_number != 0">
                                     {{code.used_number}}/{{code.max_user}}
                                 </div>
+                                <div class="col-4 text-warning"
+                                     v-else-if="code.used_number < code.max_user && code.used_number == 0">
+                                    {{code.used_number}}/{{code.max_user}}
+                                </div>
+                                <div class="col-4 text-danger" v-else>{{code.used_number}}/{{code.max_user}}</div>
                             </div>
                         </template>
                         <template v-else>
@@ -86,28 +99,28 @@
 </template>
 
 <script>
-  import axios from 'axios'
+    import axios from 'axios'
 
-  export default {
-    name: 'ResellerStats',
-    data() {
-      return {
-        stats: null
-      }
-    },
-    computed: {
-      totalUsed() {
-        return parseInt(this.stats.totalCodeMax,10) + parseInt(this.stats.totalCreateByHand,10)
-      }
-    },
-    mounted() {
-      this.loadData()
-    },
-    methods: {
-      async loadData() {
-        const { data } = await axios.post('/api/dashboard/reseller-stats')
-        this.stats = data.data
-      }
+    export default {
+        name: 'ResellerStats',
+        data() {
+            return {
+                stats: null
+            }
+        },
+        computed: {
+            totalUsed() {
+                return parseInt(this.stats.totalCodeMax, 10) + parseInt(this.stats.totalCreateByHand, 10)
+            }
+        },
+        mounted() {
+            this.loadData()
+        },
+        methods: {
+            async loadData() {
+                const {data} = await axios.post('/api/dashboard/reseller-stats')
+                this.stats = data.data
+            }
+        }
     }
-  }
 </script>

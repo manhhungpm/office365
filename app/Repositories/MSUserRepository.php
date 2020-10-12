@@ -303,4 +303,21 @@ class MSUserRepository extends BaseRepository
         return false;
     }
 
+    public function changeStatus($id, $status)
+    {
+        $msUser = $this->model->find($id);
+
+        if ($msUser != null) {
+            $msUser->accountEnabled = $status;
+
+            if ($msUser->save()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
 }

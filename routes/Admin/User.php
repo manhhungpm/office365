@@ -15,4 +15,6 @@ Route::group(['prefix' => '/user', 'as' => 'user.'], function () {
     Route::post('increase-max-user', 'UserController@increaseMaxUser')->name('increase-max-user');
     Route::post('check-user-before-delete', 'UserController@checkUserBeforeDelete')->name('check-user-before-delete');
     Route::post('update-status-user', 'UserController@updateStatusUser')->name('update-status-user');
+    Route::post('update-status-user', 'UserController@updateStatusUser')->name('update-status-user');
+    Route::post('change-status', 'UserController@changeStatus')->name('change-status');
 });
