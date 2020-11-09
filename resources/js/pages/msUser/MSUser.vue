@@ -85,7 +85,7 @@
                 //     }
                 // },
                 {
-                    title: 'Trang thai',
+                    title: 'Trạng thái',
                     data: 'accountEnabled',
                     render(data) {
                         if (parseInt(data) === 1) {

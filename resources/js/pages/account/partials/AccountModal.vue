@@ -1,7 +1,7 @@
 <template>
     <the-modal ref="modal" :title="isEdit ? 'Cập nhật tài khoản Office 265' : 'Thêm tài khoản Office 365'"
-           :onHidden="onModalHidden"
-           :center="center"
+               :onHidden="onModalHidden"
+               :center="center"
     >
         <form class="m-form m-form--state m-form--label-align-right"
               @submit.prevent="validateForm">
@@ -53,108 +53,119 @@
 </template>
 
 <script>
-  import Form from 'vform'
+    import Form from 'vform'
 
-  import { SUCCESS } from '~/constants/code'
-  import { notify, notifyTryAgain, notifyUpdateSuccess, notifyAddSuccess } from '~/helpers/bootstrap-notify'
+    import {SUCCESS} from '~/constants/code'
+    import {notify, notifyTryAgain, notifyUpdateSuccess, notifyAddSuccess} from '~/helpers/bootstrap-notify'
 
-  const defaultAccount = {
-    name: '',
-    description: '',
-    client_id: '',
-    client_secret: '',
-    tenant_id: ''
-  }
-
-  export default {
-    name: 'AccountModal',
-    props: {
-      center:{
-        type: Boolean,
-        default: false
-      },
-      onActionSuccess: {
-        type: Function,
-        default: () => {
-        }
-      }
-    },
-    data () {
-      return {
-        isEdit: false,
-        form: new Form(defaultAccount)
-      }
-    },
-    methods: {
-      validateForm () {
-        this.$validator.validateAll().then((result) => {
-          if (result) {
-            if (this.isEdit) {
-              this.updateItem()
-            } else {
-              this.addItem()
-            }
-          }
-        })
-      },
-      show (item = null) {
-        if (item != null) {
-          this.form = new Form(item)
-          this.isEdit = true
-        }
-
-        this.$refs.modal.show()
-      },
-      hide () {
-        $(this.$el).modal('hide')
-      },
-
-      onModalHidden () {
-        this.form = new Form(defaultAccount)
-        this.isEdit = false
-        this.$validator.reset()
-      },
-      async addItem () {
-        try {
-          const { data } = await this.form.post('/api/account/store')
-
-          if (data.code == SUCCESS) {
-            notifyAddSuccess('tài khoản')
-            this.$refs.modal.hide()
-            this.onActionSuccess()
-          } else {
-            notifyTryAgain()
-          }
-        }
-        catch (e) {
-          const { status } = e.response
-
-          if (status != 422) {
-            notifyTryAgain()
-          }
-        }
-      },
-      async updateItem () {
-        try {
-          const { data } = await this.form.post('/api/account/edit')
-
-          if (data.code == SUCCESS) {
-            notifyUpdateSuccess('tài khoản')
-            this.$refs.modal.hide()
-            this.onActionSuccess()
-          } else {
-            notifyTryAgain()
-          }
-        }
-        catch (e) {
-          const { status } = e.response
-
-          if (status != 422) {
-            notifyTryAgain()
-          }
-        }
-
-      }
+    const defaultAccount = {
+        name: '',
+        description: '',
+        client_id: '',
+        client_secret: '',
+        tenant_id: ''
     }
-  }
+
+    export default {
+        name: 'AccountModal',
+        props: {
+            center: {
+                type: Boolean,
+                default: false
+            },
+            onActionSuccess: {
+                type: Function,
+                default: () => {
+                }
+            }
+        },
+        data() {
+            return {
+                isEdit: false,
+                form: new Form(defaultAccount)
+            }
+        },
+        mounted() {
+            this.demoGetLicense();
+        },
+        methods: {
+            validateForm() {
+                this.$validator.validateAll().then((result) => {
+                    if (result) {
+                        if (this.isEdit) {
+                            this.updateItem()
+                        } else {
+                            this.addItem()
+                        }
+                    }
+                })
+            },
+            show(item = null) {
+                if (item != null) {
+                    this.form = new Form(item)
+                    this.isEdit = true
+                }
+
+                this.$refs.modal.show()
+            },
+            hide() {
+                $(this.$el).modal('hide')
+            },
+
+            onModalHidden() {
+                this.form = new Form(defaultAccount)
+                this.isEdit = false
+                this.$validator.reset()
+            },
+            async addItem() {
+                try {
+                    const {data} = await this.form.post('/api/account/store')
+
+                    if (data.code == SUCCESS) {
+                        notifyAddSuccess('tài khoản')
+                        this.$refs.modal.hide()
+                        this.onActionSuccess()
+                    } else {
+                        notifyTryAgain()
+                    }
+                } catch (e) {
+                    const {status} = e.response
+
+                    if (status != 422) {
+                        notifyTryAgain()
+                    }
+                }
+            },
+            async updateItem() {
+                try {
+                    const {data} = await this.form.post('/api/account/edit')
+
+                    if (data.code == SUCCESS) {
+                        notifyUpdateSuccess('tài khoản')
+                        this.$refs.modal.hide()
+                        this.onActionSuccess()
+                    } else {
+                        notifyTryAgain()
+                    }
+                } catch (e) {
+                    const {status} = e.response
+
+                    if (status != 422) {
+                        notifyTryAgain()
+                    }
+                }
+
+            },
+            async demoGetLicense() {
+                try {
+                    const {data} = await this.form.post('/api/account/get-license')
+
+                    console.log(data);
+                } catch (e) {
+                    console.log(e);
+                }
+
+            }
+        }
+    }
 </script>

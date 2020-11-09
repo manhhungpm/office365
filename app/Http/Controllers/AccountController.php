@@ -92,4 +92,11 @@ class AccountController extends Controller
             'total' => $total
         ]);
     }
+
+    public function getLicense()
+    {
+        $result = $this->accountRepository->getLicense();
+
+        return response()->json($result);
+    }
 }
