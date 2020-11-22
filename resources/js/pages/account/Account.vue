@@ -16,6 +16,7 @@
         </the-portlet>
 
         <account-modal ref="modal" :on-action-success="updateItemSuccess"/>
+        <account-edit-license-modal ref="licenseModal" :on-action-success="updateItemSuccess"></account-edit-license-modal>
     </div>
 </template>
 
@@ -28,10 +29,12 @@
     import {notify, notifyTryAgain, notifyDeleteSuccess, notifyUpdateSuccess} from '~/helpers/bootstrap-notify'
 
     import AccountModal from './partials/AccountModal'
+    import AccountEditLicenseModal from "./partials/AccountEditLicenseModal";
 
     Vue.component('account-modal', AccountModal)
 
     const vm = {
+        components: {AccountEditLicenseModal},
         layout: 'default',
         middleware: 'auth',
         metaInfo() {
@@ -85,7 +88,8 @@
                     width: '15%',
                     render() {
                         return generateTableAction('edit', 'showDetail') +
-                            generateTableAction('delete', 'deleteItem')
+                            generateTableAction('delete', 'deleteItem') +
+                            generateTableAction('editLicense', 'editLicense', 'warning', 'la-check', 'Cấu hình license')
                     }
                 }
             ],
@@ -93,14 +97,10 @@
         }),
         mounted() {
             this.handleEvents();
-            // this.getLicenseDemo();
         },
         methods: {
-            async getLicenseDemo() {
-                let res = await axios.post('/api/account/get-license')
-
-                console.log(res);
-
+            editLicense(table, rowData){
+                this.$refs.licenseModal.show(rowData)
             },
             setTable(table) {
                 this.table = table
@@ -181,6 +181,11 @@
                         type: 'click',
                         name: 'deleteItem',
                         action: this.deleteItem
+                    },
+                    {
+                        type: 'click',
+                        name: 'editLicense',
+                        action: this.editLicense
                     }
                 ]
             }

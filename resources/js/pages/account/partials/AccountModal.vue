@@ -57,6 +57,7 @@
 
     import {SUCCESS} from '~/constants/code'
     import {notify, notifyTryAgain, notifyUpdateSuccess, notifyAddSuccess} from '~/helpers/bootstrap-notify'
+    import axios from 'axios'
 
     const defaultAccount = {
         name: '',
@@ -86,7 +87,6 @@
             }
         },
         mounted() {
-            this.demoGetLicense();
         },
         methods: {
             validateForm() {
@@ -156,16 +156,6 @@
                 }
 
             },
-            async demoGetLicense() {
-                try {
-                    const {data} = await this.form.post('/api/account/get-license')
-
-                    console.log(data);
-                } catch (e) {
-                    console.log(e);
-                }
-
-            }
         }
     }
 </script>
