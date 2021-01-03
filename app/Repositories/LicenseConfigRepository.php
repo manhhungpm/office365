@@ -39,24 +39,25 @@ class LicenseConfigRepository extends BaseRepository
 
     public function add($arr)
     {
-        $query = $this->model;
-
         //Xóa các cấu hình cũ đi
         LicenseConfig::truncate();
 
         $arrLicense = $arr['assigned_licenses'];
-        foreach ($arrLicense as $value){
-//            dd($value); //$value->skuId //id thang cha
 
-            if(sizeof($value['disabledPlans']) != 0){ //Có license con
-                foreach ($value['disabledPlans'] as $child){
-//                dd($child); //id thằng con
+        foreach ($arrLicense as $value) {
+            if (sizeof($value['disabledPlans']) != 0) { //Có license con
+                foreach ($value['disabledPlans'] as $child) {
+                    $query = new LicenseConfig();
                     $query->license_parent = $value['skuId'];
-                    $query->license_child = $child;
+                    $query->license_child = $child['id'];
+                    $query->parent_name = $value['name'];
+                    $query->child_name = $child['name'];
                     $query->save();
                 }
             } else { //Ko có license con
+                $query = new LicenseConfig();
                 $query->license_parent = $value['skuId'];
+                $query->parent_name = $value['name'];
                 $query->save();
             }
 

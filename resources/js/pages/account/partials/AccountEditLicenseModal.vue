@@ -1,12 +1,20 @@
 <template>
     <the-modal ref="modal" :title="'Cấu hình license'"
                :onHidden="onModalHidden"
-               :center="center"
     >
         <form class="m-form m-form--state m-form--label-align-right"
               @submit.prevent="validateForm">
 
             <div class="row">
+                <div class="col-md-12"><span class="text-success">CẤU HÌNH HIỆN TẠI:</span>
+                    <ul v-for="s in selectedLicense"><b>{{s.parent}}</b>:
+                        <div class="text-danger">Không dùng:
+                            <span v-for="c in s.child">{{c}},</span>
+                        </div>
+
+                    </ul>
+                </div>
+
                 <div class="col-12">
                     <label>Chọn license
                         <span class="text-danger">(TICK CHỌN NHỮNG LICENSE DÙNG)</span>
@@ -17,8 +25,8 @@
                                 <div class="m-checkbox m-checkbox--primary">
                                     <label class="m-checkbox m-checkbox--check-bold m-checkbox--state-brand">
                                         <input type="checkbox" class="form-check-input itemChild"
-                                               :value="item.id"
-                                               v-model="idLicenseParent"
+                                               :value="item.id+'>>'+item.name"
+                                               v-model="form.idLicenseParent"
                                         >
                                         {{ item.name }}
                                         <span></span></label>
@@ -46,8 +54,8 @@
                                         <div class="m-checkbox m-checkbox--primary">
                                             <label class="m-checkbox m-checkbox--check-bold m-checkbox--state-brand">
                                                 <input type="checkbox" class="form-check-input itemChild"
-                                                       :value="it.servicePlanId + '//' + item.id"
-                                                       v-model="idLicenseChild"
+                                                       :value="it.servicePlanId + '>>' +it.servicePlanName + '//' + item.id "
+                                                       v-model="form.idLicenseChild"
                                                 >
                                                 {{ it.servicePlanName }}
                                                 <span></span>
@@ -82,7 +90,9 @@
     import FormControl from "../../../components/common/FormControl";
 
     const defaultAccount = {
-        assigned_licenses: null
+        assigned_licenses: null,
+        idLicenseParent: [],
+        idLicenseChild: [],
     }
 
     export default {
@@ -102,19 +112,11 @@
         data() {
             return {
                 form: new Form(defaultAccount),
-                idLicenseParent: [],
-                idLicenseChild: [],
                 arrLicense: [],
+                selectedLicense: []
             }
         },
-        watch: {
-            idLicenseParent(data) {
-                // console.log(data); //Có đc id của licensse cha đã chọn
-            },
-            idLicenseChild(data) {
-                // console.log(data) //Có đc id của licensse con đã chọn
-            }
-        },
+        watch: {},
         mounted() {
             this.getLicense();
         },
@@ -134,6 +136,7 @@
                     })
 
                     // console.log(this.arrLicense)
+
                 } catch (e) {
                     console.log(e);
                 }
@@ -141,9 +144,11 @@
             async addLicense() {
                 try {
 
-                    this.form.assigned_licenses = this.prepareData(this.idLicenseParent, this.idLicenseChild)
+                    this.form.assigned_licenses = this.prepareData(this.form.idLicenseParent, this.form.idLicenseChild)
 
-                    const {data} = await this.form.post('/api/license-config/add')
+                    console.log(this.form.assigned_licenses)
+
+                    const {data} = await this.form.post('/api/license-config/add-license')
 
                     if (data.code == SUCCESS) {
                         notifyUpdateSuccess('cấu hình')
@@ -157,32 +162,35 @@
                 }
             },
             prepareData(parent, child) {
-                // console.log(parent)
-                // console.log(child[0].split("//"))
                 let assignedLicenses = []
 
                 //Tạo skuId
                 parent.forEach(function (e) {
+                    let pSplit = e.split(">>")
                     assignedLicenses.push({
                         disabledPlans: [],
-                        skuId: e
+                        skuId: pSplit[0],
+                        name: pSplit[1]
                     })
                 })
 
                 //Tạo disabledPlans
                 assignedLicenses.forEach(function (a) {
                     child.forEach(function (c) {
-                        let eSplit = c.split("//")
-                        if(a.skuId == eSplit[1]){
-                            a.disabledPlans.push(eSplit[0])
+                        let eSplit = c.split("//") //con + id của cha
+                        if (a.skuId == eSplit[1]) {
+                            let childSplit = eSplit[0].split(">>") //id con + tên con
+                            a.disabledPlans.push({
+                                id: childSplit[0],
+                                name: childSplit[1]
+                            })
                         }
                     })
                 })
 
-                console.log(assignedLicenses);
+                // console.log(assignedLicenses);
 
                 return assignedLicenses;
-
             },
             validateForm() {
                 this.$validator.validateAll().then((result) => {
@@ -191,13 +199,43 @@
                     }
                 })
             },
-            show(item = null) {
-                console.log(item)
-                if (item != null) {
-                    this.form = new Form(item)
-                }
+            async show() {
+                //Hiển thị những thằng đã chọn
+                await this.historyData()
 
                 this.$refs.modal.show()
+            },
+            async historyData() {
+                const {data} = await axios.post('/api/license-config/listing-license')
+
+                let arrData = data.data;
+                let parentName = []
+                let selected = []
+
+                arrData.forEach(function (e) {
+                    parentName.push(e.parent_name)
+                })
+
+                let uniqueParent =  [...new Set(parentName)];
+
+                selected = uniqueParent.map(function (e) {
+                    return {
+                        parent: e,
+                        child: []
+                    }
+                })
+
+                selected.forEach(function (e) {
+                    arrData.forEach(function (a) {
+                        if (e.parent == a.parent_name){
+                            e.child.push(a.child_name)
+                        }
+                    })
+                })
+
+                this.selectedLicense = selected
+
+                console.log(selected)
             },
             hide() {
                 $(this.$el).modal('hide')

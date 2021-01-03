@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Account;
+use App\Models\LicenseConfig;
 use App\Models\MSUser;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -46,6 +47,8 @@ class AssignUserLicenseCommand extends Command
 
         $account = Account::find($accountId);
 
+        $this->getConfigLicense();
+
         if($account != null){
             $url = Str::replaceArray('?', [$id], API_ASSIGN_LICENSE);
 
@@ -59,5 +62,11 @@ class AssignUserLicenseCommand extends Command
             ], $account->access_token, 'POST', true);
         }
 
+    }
+
+    public function getConfigLicense(){
+        $query = LicenseConfig::query()->get()->toArray();
+
+        dd($query);
     }
 }

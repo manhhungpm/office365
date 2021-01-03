@@ -13,6 +13,18 @@
                         <span>{{ $t('button.add')}}</span>
                     </span>
             </v-button>
+
+            <v-button color="success" style-type="air"
+                      class="m-btn--custom m-btn--icon"
+                      slot="tool"
+                      @click.native="editLicense"
+                      style="margin-left: 10px"
+            >
+                    <span>
+                        <i class="la la-edit"></i>
+                        <span>Cấu hình license</span>
+                    </span>
+            </v-button>
         </the-portlet>
 
         <account-modal ref="modal" :on-action-success="updateItemSuccess"/>
@@ -88,8 +100,8 @@
                     width: '15%',
                     render() {
                         return generateTableAction('edit', 'showDetail') +
-                            generateTableAction('delete', 'deleteItem') +
-                            generateTableAction('editLicense', 'editLicense', 'warning', 'la-check', 'Cấu hình license')
+                            generateTableAction('delete', 'deleteItem')
+                            // + generateTableAction('editLicense', 'editLicense', 'warning', 'la-check', 'Cấu hình license')
                     }
                 }
             ],
@@ -99,8 +111,8 @@
             this.handleEvents();
         },
         methods: {
-            editLicense(table, rowData){
-                this.$refs.licenseModal.show(rowData)
+            editLicense(){
+                this.$refs.licenseModal.show()
             },
             setTable(table) {
                 this.table = table
