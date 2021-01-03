@@ -16,6 +16,7 @@
                 </div>
 
                 <div class="col-12">
+                    <span class="text-success">CẤU HÌNH MỚI:</span> <br>
                     <label>Chọn license
                         <span class="text-danger">(TICK CHỌN NHỮNG LICENSE DÙNG)</span>
                     </label>

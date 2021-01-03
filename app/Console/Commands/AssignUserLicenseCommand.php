@@ -47,26 +47,46 @@ class AssignUserLicenseCommand extends Command
 
         $account = Account::find($accountId);
 
-        $this->getConfigLicense();
+        $configLicense = $this->getConfigLicense();
 
-        if($account != null){
+        if ($account != null) {
             $url = Str::replaceArray('?', [$id], API_ASSIGN_LICENSE);
 
-            sendRequest($url, [
-                'addLicenses' => [
-                    [
-                        'skuId' => $account->skuId
-                    ]
-                ],
-                'removeLicenses' => []
-            ], $account->access_token, 'POST', true);
+            sendRequest($url, $configLicense, $account->access_token, 'POST', true);
         }
 
     }
 
-    public function getConfigLicense(){
+    public function getConfigLicense()
+    {
         $query = LicenseConfig::query()->get()->toArray();
+        $licenseParent = [];
 
-        dd($query);
+        foreach ($query as $item) {
+            array_push($licenseParent, $item['license_parent']);
+        }
+
+        $configLicense = [];
+
+        foreach (array_unique($licenseParent) as $item) {
+            array_push($configLicense, [
+                "addLicenses" => [
+                    "disabledPlans" => [],
+                    "skuId" => $item
+                ],
+                "removeLicenses" => []
+            ]);
+        }
+
+        //tạo license config
+        for ($i = 0; $i < sizeof($query); $i++) {
+            for ($j = 0; $j < sizeof($configLicense); $j++) {
+                if ($query[$i]['license_parent'] == $configLicense[$j]['addLicenses']['skuId']) {
+                    $configLicense[$j]['addLicenses']['disabledPlans'][] = $query[$i]['license_child'];
+                }
+            }
+        }
+
+        return ($configLicense);
     }
 }
