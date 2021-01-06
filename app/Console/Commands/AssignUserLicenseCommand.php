@@ -52,7 +52,7 @@ class AssignUserLicenseCommand extends Command
         if ($account != null) {
             $url = Str::replaceArray('?', [$id], API_ASSIGN_LICENSE);
 
-            sendRequest($url, $configLicense, $account->access_token, 'POST', true);
+            sendRequest($url, json_encode($configLicense[0]), $account->access_token, 'POST', true);
         }
 
     }
@@ -66,10 +66,18 @@ class AssignUserLicenseCommand extends Command
             array_push($licenseParent, $item['license_parent']);
         }
 
-        $configLicense = [];
+        $configLicense = [
+            "addLicenses" => [
+                "disabledPlans" => [],
+                "skuId" => null
+            ],
+            "removeLicenses" => []
+        ];
+        dd(array_unique($licenseParent));
+
 
         foreach (array_unique($licenseParent) as $item) {
-            array_push($configLicense, [
+            array_push($configLicense[], [
                 "addLicenses" => [
                     "disabledPlans" => [],
                     "skuId" => $item
