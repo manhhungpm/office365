@@ -52,7 +52,7 @@ class AssignUserLicenseCommand extends Command
         if ($account != null) {
             $url = Str::replaceArray('?', [$id], API_ASSIGN_LICENSE);
 
-            sendRequest($url, json_encode($configLicense[0]), $account->access_token, 'POST', true);
+            sendRequest($url, $configLicense, $account->access_token, 'POST', true);
         }
 
     }
@@ -67,30 +67,22 @@ class AssignUserLicenseCommand extends Command
         }
 
         $configLicense = [
-            "addLicenses" => [
-                "disabledPlans" => [],
-                "skuId" => null
-            ],
+            "addLicenses" => [],
             "removeLicenses" => []
         ];
-        dd(array_unique($licenseParent));
 
-
-        foreach (array_unique($licenseParent) as $item) {
-            array_push($configLicense[], [
-                "addLicenses" => [
-                    "disabledPlans" => [],
-                    "skuId" => $item
-                ],
-                "removeLicenses" => []
+        foreach (array_unique($licenseParent) as $item){
+            array_push($configLicense["addLicenses"],[
+                "disabledPlans" => [],
+                "skuId" => $item
             ]);
         }
 
-        //tạo license config
-        for ($i = 0; $i < sizeof($query); $i++) {
-            for ($j = 0; $j < sizeof($configLicense); $j++) {
-                if ($query[$i]['license_parent'] == $configLicense[$j]['addLicenses']['skuId']) {
-                    $configLicense[$j]['addLicenses']['disabledPlans'][] = $query[$i]['license_child'];
+
+        for ($i=0;$i<sizeof($query);$i++){
+            for ($j=0;$j<sizeof($configLicense["addLicenses"]);$j++){
+                if ($query[$i]["license_parent"] == $configLicense["addLicenses"][$j]["skuId"]){
+                    array_push($configLicense["addLicenses"][$j]["disabledPlans"],$query[$i]["license_child"]);
                 }
             }
         }
