@@ -29,7 +29,7 @@ class AccountRepository extends BaseRepository
             ->where('app_name', 'LIKE', "%$keyword%");
 
         if (!$counting) {
-            $query->select('id', 'app_name', 'description', 'client_id', 'client_secret', 'tenant_id', 'status');
+            $query->select('id', 'app_name', 'description', 'client_id', 'client_secret', 'tenant_id', 'status','access_token');
             if ($limit > 0) {
                 $query->skip($offset)
                     ->take($limit);
