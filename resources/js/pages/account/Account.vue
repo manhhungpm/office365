@@ -14,21 +14,22 @@
                     </span>
             </v-button>
 
-            <v-button color="success" style-type="air"
-                      class="m-btn--custom m-btn--icon"
-                      slot="tool"
-                      @click.native="editLicense"
-                      style="margin-left: 10px"
-            >
-                    <span>
-                        <i class="la la-edit"></i>
-                        <span>Cấu hình license</span>
-                    </span>
-            </v-button>
+<!--            <v-button color="success" style-type="air"-->
+<!--                      class="m-btn&#45;&#45;custom m-btn&#45;&#45;icon"-->
+<!--                      slot="tool"-->
+<!--                      @click.native="editLicense"-->
+<!--                      style="margin-left: 10px"-->
+<!--            >-->
+<!--                    <span>-->
+<!--                        <i class="la la-edit"></i>-->
+<!--                        <span>Cấu hình license</span>-->
+<!--                    </span>-->
+<!--            </v-button>-->
         </the-portlet>
 
         <account-modal ref="modal" :on-action-success="updateItemSuccess"/>
-        <account-edit-license-modal ref="licenseModal" :on-action-success="updateItemSuccess"></account-edit-license-modal>
+        <account-edit-license-modal ref="licenseModal"
+                                    :on-action-success="updateItemSuccess"></account-edit-license-modal>
     </div>
 </template>
 
@@ -92,16 +93,24 @@
                     }
                 },
                 {
-                    data: null,
+                    data: "status",
                     title: 'Hành động',
                     responsivePriority: 1,
                     orderable: false,
                     className: 'text-center',
                     width: '15%',
-                    render() {
-                        return generateTableAction('edit', 'showDetail') +
-                            generateTableAction('delete', 'deleteItem')
-                            // + generateTableAction('editLicense', 'editLicense', 'warning', 'la-check', 'Cấu hình license')
+                    render(data) {
+                        // return generateTableAction('edit', 'showDetail') +
+                        //     generateTableAction('delete', 'deleteItem')
+                        // + generateTableAction('editLicense', 'editLicense', 'warning', 'la-check', 'Cấu hình license')
+
+                        if (data) {
+                            return generateTableAction('edit', 'showDetail')
+                                + generateTableAction('delete', 'deleteItem')
+                                + generateTableAction('editLicense', 'editLicense', 'warning', 'la-check', 'Cấu hình license')
+                        } else {
+                            return generateTableAction('edit', 'showDetail') + generateTableAction('delete', 'deleteItem')
+                        }
                     }
                 }
             ],
@@ -111,8 +120,8 @@
             this.handleEvents();
         },
         methods: {
-            editLicense(){
-                this.$refs.licenseModal.show()
+            editLicense(table,rowData) {
+                this.$refs.licenseModal.show(rowData)
             },
             setTable(table) {
                 this.table = table

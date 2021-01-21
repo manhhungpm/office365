@@ -47,7 +47,7 @@ class AssignUserLicenseCommand extends Command
 
         $account = Account::find($accountId);
 
-        $configLicense = $this->getConfigLicense();
+        $configLicense = $this->getConfigLicense($account->id);
 
         if ($account != null) {
             $url = Str::replaceArray('?', [$id], API_ASSIGN_LICENSE);
@@ -57,9 +57,9 @@ class AssignUserLicenseCommand extends Command
 
     }
 
-    public function getConfigLicense()
+    public function getConfigLicense($id)
     {
-        $query = LicenseConfig::query()->get()->toArray();
+        $query = LicenseConfig::query()->where('account_id',$id)->get()->toArray();
         $licenseParent = [];
 
         foreach ($query as $item) {

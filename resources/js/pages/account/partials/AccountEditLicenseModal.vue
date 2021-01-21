@@ -119,12 +119,24 @@
         },
         watch: {},
         mounted() {
-            this.getLicense();
+            // this.getLicense();
         },
         methods: {
-            async getLicense() {
+            async show(item) {
+                //Truyền id để load license của nó
+                this.getLicense(item.id)
+                //Id của account
+                this.form.account_id = item.id
+                //Hiển thị những thằng đã chọn
+                await this.historyData(item.id)
+
+                this.$refs.modal.show()
+            },
+            async getLicense(id) {
                 try {
-                    const {data} = await axios.post('/api/account/get-license')
+                    const {data} = await axios.post('/api/account/get-license',{
+                        id: id
+                    })
                     let $this = this
                     let arrData = data.value;
 
@@ -144,10 +156,7 @@
             },
             async addLicense() {
                 try {
-
                     this.form.assigned_licenses = this.prepareData(this.form.idLicenseParent, this.form.idLicenseChild)
-
-                    console.log(this.form.assigned_licenses)
 
                     const {data} = await this.form.post('/api/license-config/add-license')
 
@@ -200,14 +209,10 @@
                     }
                 })
             },
-            async show() {
-                //Hiển thị những thằng đã chọn
-                await this.historyData()
-
-                this.$refs.modal.show()
-            },
-            async historyData() {
-                const {data} = await axios.post('/api/license-config/listing-license')
+            async historyData(id) {
+                const {data} = await axios.post('/api/license-config/listing-license',{
+                    id: id
+                })
 
                 let arrData = data.data;
                 let parentName = []
@@ -244,6 +249,8 @@
             onModalHidden() {
                 this.form = new Form(defaultAccount)
                 this.$validator.reset()
+                this.selectedLicense = []
+                this.arrLicense = []
             },
         }
     }

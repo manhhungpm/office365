@@ -93,9 +93,9 @@ class AccountController extends Controller
         ]);
     }
 
-    public function getLicense()
+    public function getLicense(Request $request)
     {
-        $result = $this->accountRepository->getLicense();
+        $result = $this->accountRepository->getLicense($request->input('id'));
 
         return response()->json($result);
     }

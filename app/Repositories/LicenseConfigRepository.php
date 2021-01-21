@@ -15,9 +15,10 @@ class LicenseConfigRepository extends BaseRepository
         return LicenseConfig::class;
     }
 
-    public function getList($keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
+    public function getList($keyword = null,$searchParams = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
     {
-        $query = $this->model;
+        $id = $searchParams;
+        $query = $this->model->where('account_id',$id);
 
         if (!$counting) {
             $query->select('*');
@@ -43,6 +44,7 @@ class LicenseConfigRepository extends BaseRepository
         LicenseConfig::truncate();
 
         $arrLicense = $arr['assigned_licenses'];
+        $id = $arr['account_id'];
 
         foreach ($arrLicense as $value) {
             if (sizeof($value['disabledPlans']) != 0) { //Có license con
@@ -52,12 +54,14 @@ class LicenseConfigRepository extends BaseRepository
                     $query->license_child = $child['id'];
                     $query->parent_name = $value['name'];
                     $query->child_name = $child['name'];
+                    $query->account_id = $id;
                     $query->save();
                 }
             } else { //Ko có license con
                 $query = new LicenseConfig();
                 $query->license_parent = $value['skuId'];
                 $query->parent_name = $value['name'];
+                $query->account_id = $id;
                 $query->save();
             }
 

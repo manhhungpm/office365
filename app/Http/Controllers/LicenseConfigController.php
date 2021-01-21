@@ -23,8 +23,11 @@ class LicenseConfigController extends Controller
     {
         $params = getDataTableRequestParams($request);
 
+        $searchParams = $request->input('id');
+
         $total = $this->licenseConfigRepository->getList(
             $params['keyword'],
+            $searchParams,
             true
         );
 
@@ -32,6 +35,7 @@ class LicenseConfigController extends Controller
             'recordsTotal' => $total,
             'data' => $this->licenseConfigRepository->getList(
                 $params['keyword'],
+                $searchParams,
                 false,
                 $params['length'],
                 $params['start'],
@@ -47,7 +51,7 @@ class LicenseConfigController extends Controller
 
     public function add(Request $request)
     {
-        $result = $this->licenseConfigRepository->add($request->only('assigned_licenses'));
+        $result = $this->licenseConfigRepository->add($request->only('assigned_licenses','account_id'));
 
         return processCommonResponse($result);
     }
