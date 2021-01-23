@@ -79,19 +79,22 @@ class SyncUserCommand extends Command
                         ]
                     );
                 }
+
+                //Xóa những thằng có sync_at nhỏ hơn carbon->now - 1ph
+                //tại những thằng có trên server được đồng bộ thì sẽ được đồng bộ lại sync_at (5ph 1 lần)
+                //còn nếu không có thì sync at vẫn giữ nguyên
+
+                $msUserDelete = MSUser::select('ms_user_id','sync_at')
+                    ->where('account_id',$account->id)
+                    ->where('sync_at', '<', Carbon::now()->subMinute())
+                    ->get()->toArray();
+                $arrId = [];
+                foreach ($msUserDelete as $item) {
+                    array_push($arrId, $item['ms_user_id']);
+                }
+                MSUser::destroy($arrId);
             }
         }
-
-        //Xóa những thằng có sync_at nhỏ hơn carbon->now - 1ph
-        //tại những thằng có trên server được đồng bộ thì sẽ được đồng bộ lại sync_at (5ph 1 lần)
-        //còn nếu không có thì sync at vẫn giữ nguyên
-
-        $msUserDelete = MSUser::select('ms_user_id')->where('sync_at', '<', Carbon::now()->subMinute())->get()->toArray();
-        $arrId = [];
-        foreach ($msUserDelete as $item) {
-            array_push($arrId, $item['ms_user_id']);
-        }
-        MSUser::destroy($arrId);
     }
 
     private function createDomainMap()

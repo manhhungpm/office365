@@ -67,19 +67,22 @@ class SyncDomainCommand extends Command
                         ]
                     );
                 }
+
+                //Xóa những thằng có sync_at nhỏ hơn carbon->now - 15ph
+                //tại những thằng có trên server được đồng bộ thì sẽ được đồng bộ lại sync_at (1 tiếng 1 lần)
+                //còn nếu không có thì sync at vẫn giữ nguyên
+
+                $domainDelete = Domain::select('domain_id')
+                    ->where('account_id',$account->id)
+                    ->where('sync_at', '<', Carbon::now()->subMinutes(15))
+                    ->get()->toArray()
+                ;
+                $arrId = [];
+                foreach ($domainDelete as $item) {
+                    array_push($arrId, $item['domain_id']);
+                }
+                Domain::destroy($arrId);
             }
         }
-
-
-        //Xóa những thằng có sync_at nhỏ hơn carbon->now - 15ph
-        //tại những thằng có trên server được đồng bộ thì sẽ được đồng bộ lại sync_at (1 tiếng 1 lần)
-        //còn nếu không có thì sync at vẫn giữ nguyên
-
-        $domainDelete = Domain::select('domain_id')->where('sync_at', '<', Carbon::now()->subMinutes(15))->get()->toArray();
-        $arrId = [];
-        foreach ($domainDelete as $item) {
-            array_push($arrId, $item['domain_id']);
-        }
-        Domain::destroy($arrId);
     }
 }
