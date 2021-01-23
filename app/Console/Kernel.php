@@ -36,7 +36,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('office:get-token')->everyThirtyMinutes();
         $schedule->command('office:sync-domain')->hourly();
-        $schedule->command('office:sync-user')->everyMinute();
+        $schedule->command('office:sync-user')->everyFiveMinutes(); //trước là 1 phút
     }
 
     /**
