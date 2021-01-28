@@ -99,4 +99,11 @@ class AccountController extends Controller
 
         return response()->json($result);
     }
+
+    public function syncOffline()
+    {
+        $result = $this->accountRepository->syncOffline();
+
+        return processCommonResponse($result);
+    }
 }

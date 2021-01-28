@@ -40,11 +40,11 @@ class LicenseConfigRepository extends BaseRepository
 
     public function add($arr)
     {
-        //Xóa các cấu hình cũ đi
-        LicenseConfig::truncate();
-
         $arrLicense = $arr['assigned_licenses'];
         $id = $arr['account_id'];
+
+        //Xóa các cấu hình cũ đi
+        LicenseConfig::where('account_id',$id)->delete();
 
         foreach ($arrLicense as $value) {
             if (sizeof($value['disabledPlans']) != 0) { //Có license con

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Account;
+use Illuminate\Support\Facades\Artisan;
 
 class AccountRepository extends BaseRepository
 {
@@ -116,6 +117,11 @@ class AccountRepository extends BaseRepository
         $account->user_id = auth()->id();
 
         if ($account->save()) {
+            //Gọi sync user và domain luôn
+            Artisan::call("office:get-token");
+            Artisan::call("office:sync-user");
+            Artisan::call("office:sync-domain");
+
             return true;
         } else {
             return false;
@@ -134,5 +140,14 @@ class AccountRepository extends BaseRepository
 
             return ($result);
         }
+    }
+
+    public function syncOffline(){
+        //Gọi sync user và domain luôn
+        Artisan::call("office:get-token");
+        Artisan::call("office:sync-user");
+        Artisan::call("office:sync-domain");
+
+        return true;
     }
 }

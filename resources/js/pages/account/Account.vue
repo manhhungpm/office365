@@ -14,17 +14,18 @@
                     </span>
             </v-button>
 
-<!--            <v-button color="success" style-type="air"-->
-<!--                      class="m-btn&#45;&#45;custom m-btn&#45;&#45;icon"-->
-<!--                      slot="tool"-->
-<!--                      @click.native="editLicense"-->
-<!--                      style="margin-left: 10px"-->
-<!--            >-->
-<!--                    <span>-->
-<!--                        <i class="la la-edit"></i>-->
-<!--                        <span>Cấu hình license</span>-->
-<!--                    </span>-->
-<!--            </v-button>-->
+            <v-button color="success" style-type="air"
+                      class="m-btn--custom m-btn--icon"
+                      slot="tool"
+                      @click.native="syncAccountOffline"
+                      style="margin-left: 10px"
+                      :loading="isLoading"
+            >
+                    <span>
+                        <i class="la la-refresh"></i>
+                        <span>Sync account</span>
+                    </span>
+            </v-button>
         </the-portlet>
 
         <account-modal ref="modal" :on-action-success="updateItemSuccess"/>
@@ -114,13 +115,14 @@
                     }
                 }
             ],
-            table: null
+            table: null,
+            isLoading: false
         }),
         mounted() {
             this.handleEvents();
         },
         methods: {
-            editLicense(table,rowData) {
+            editLicense(table, rowData) {
                 this.$refs.licenseModal.show(rowData)
             },
             setTable(table) {
@@ -188,6 +190,23 @@
                         notifyTryAgain()
                     }
                 })
+            },
+            async syncAccountOffline() {
+                console.log(123)
+                let res = await axios.post('/api/account/sync-offline')
+                this.isLoading = true;
+
+                const {data} = res
+                let $this = this
+
+                setTimeout(function () {
+                    if (parseInt(data.code) === 0) {
+                        $this.isLoading = false;
+                        notify("Thông báo", "Sync thành công", "success");
+                    } else {
+                        notifyTryAgain()
+                    }
+                },5000)
             }
         },
         computed: {
