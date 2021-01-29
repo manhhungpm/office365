@@ -200,13 +200,9 @@
                 let $this = this
 
                 setTimeout(function () {
-                    if (parseInt(data.code) === 0) {
-                        $this.isLoading = false;
-                        notify("Thông báo", "Sync thành công", "success");
-                    } else {
-                        notifyTryAgain()
-                    }
-                },5000)
+                    $this.isLoading = false;
+                    notify("Thông báo", "Sync thành công", "success");
+                }, 5000)
             }
         },
         computed: {
