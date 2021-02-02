@@ -60,7 +60,10 @@
                     data: 'account',
                     title: 'Tenant Name',
                     render(data) {
-                        return htmlEscapeEntities(data.app_name)
+                        if (data) {
+                            return htmlEscapeEntities(data.app_name)
+                        }
+                        return "-";
                     }
                 },
                 {
@@ -108,8 +111,8 @@
                 {
                     data: 'code',
                     title: 'Tạo bằng mã',
-                    render(data){
-                        if(data){
+                    render(data) {
+                        if (data) {
                             return data
                         }
                         return "Không được tạo bằng mã"

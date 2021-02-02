@@ -14,18 +14,18 @@
                     </span>
             </v-button>
 
-            <v-button color="success" style-type="air"
-                      class="m-btn--custom m-btn--icon"
-                      slot="tool"
-                      @click.native="syncAccountOffline"
-                      style="margin-left: 10px"
-                      :loading="isLoading"
-            >
-                    <span>
-                        <i class="la la-refresh"></i>
-                        <span>Sync account</span>
-                    </span>
-            </v-button>
+<!--            <v-button color="success" style-type="air"-->
+<!--                      class="m-btn&#45;&#45;custom m-btn&#45;&#45;icon"-->
+<!--                      slot="tool"-->
+<!--                      @click.native="syncAccountOffline"-->
+<!--                      style="margin-left: 10px"-->
+<!--                      :loading="isLoading"-->
+<!--            >-->
+<!--                    <span>-->
+<!--                        <i class="la la-refresh"></i>-->
+<!--                        <span>Sync account</span>-->
+<!--                    </span>-->
+<!--            </v-button>-->
         </the-portlet>
 
         <account-modal ref="modal" :on-action-success="updateItemSuccess"/>
@@ -76,23 +76,23 @@
                     data: 'tenant_id',
                     title: 'Tenant ID'
                 },
-                {
-                    data: 'status',
-                    title: 'Trạng thái',
-                    render(data) {
-                        if (parseInt(data) === 1) {
-                            return '<label class="m-checkbox m-checkbox--air m-checkbox--state-success">' +
-                                '<input type="checkbox" class="cb-status" checked> Active' +
-                                '<span></span>' +
-                                '</label>'
-                        } else {
-                            return '<label class="m-checkbox m-checkbox--air m-checkbox--state-success">' +
-                                '<input type="checkbox" class="cb-status"> Active' +
-                                '<span></span>' +
-                                '</label>'
-                        }
-                    }
-                },
+                // {
+                //     data: 'status',
+                //     title: 'Trạng thái',
+                //     render(data) {
+                //         if (parseInt(data) === 1) {
+                //             return '<label class="m-checkbox m-checkbox--air m-checkbox--state-success">' +
+                //                 '<input type="checkbox" class="cb-status" checked> Active' +
+                //                 '<span></span>' +
+                //                 '</label>'
+                //         } else {
+                //             return '<label class="m-checkbox m-checkbox--air m-checkbox--state-success">' +
+                //                 '<input type="checkbox" class="cb-status"> Active' +
+                //                 '<span></span>' +
+                //                 '</label>'
+                //         }
+                //     }
+                // },
                 {
                     data: "status",
                     title: 'Hành động',
@@ -109,6 +109,7 @@
                             return generateTableAction('edit', 'showDetail')
                                 + generateTableAction('delete', 'deleteItem')
                                 + generateTableAction('editLicense', 'editLicense', 'warning', 'la-check', 'Cấu hình license')
+                                + generateTableAction('syncOffline', 'syncOffline', 'success', 'la-refresh', 'Sync offline')
                         } else {
                             return generateTableAction('edit', 'showDetail') + generateTableAction('delete', 'deleteItem')
                         }
@@ -136,7 +137,7 @@
 
                 bootbox.confirm({
                     title: this.$t('alert.notice'),
-                    message: `Bạn chắc chắn muốn xóa tài khoản <span class="text-danger">"${htmlEscapeEntities(rowData.name)}"</span>?`,
+                    message: `Bạn chắc chắn muốn xóa tài khoản <span class="text-danger">"${htmlEscapeEntities(rowData.app_name)}"</span>?`,
                     buttons: {
                         cancel: {
                             label: this.$t('button.cancel')
@@ -192,17 +193,22 @@
                 })
             },
             async syncAccountOffline() {
-                console.log(123)
-                let res = await axios.post('/api/account/sync-offline')
-                this.isLoading = true;
-
-                const {data} = res
                 let $this = this
 
-                setTimeout(function () {
-                    $this.isLoading = false;
-                    notify("Thông báo", "Sync thành công", "success");
-                }, 5000)
+                let res = await axios.post('/api/account/sync-offline')
+                const {data} = res
+
+                console.log(data);
+                if(data.code == 0){
+                    setTimeout(function () {
+                        // $this.isLoading = false;
+                        notify("Thông báo", "Sync thành công", "success");
+                    }, 1000)
+                } else {
+                    notifyTryAgain();
+                }
+
+
             }
         },
         computed: {
@@ -222,6 +228,11 @@
                         type: 'click',
                         name: 'editLicense',
                         action: this.editLicense
+                    },
+                    {
+                        type: 'click',
+                        name: 'syncOffline',
+                        action: this.syncAccountOffline
                     }
                 ]
             }

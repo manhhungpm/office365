@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Account;
+use App\Models\Domain;
+use App\Models\UserDomain;
 use Illuminate\Support\Facades\Artisan;
 
 class AccountRepository extends BaseRepository
@@ -149,5 +151,21 @@ class AccountRepository extends BaseRepository
         Artisan::call("office:sync-domain");
 
         return true;
+    }
+
+    public function deleteAccount($id){
+        $arrDomainId = Domain::select('domain_id')->where('account_id',$id)->get()->toArray();
+
+        if (sizeof($arrDomainId) != 0){
+            foreach ($arrDomainId as $item){
+                if(UserDomain::where('domain_id',$item['domain_id'])->count() != 0){
+                    dd("ko xoa"); //khong xoa vi co reseller dang dc gan domain day
+                }
+            }
+            dd("Xoa trong if");
+        } else {
+            //Xoa luon Account
+            dd("Xoa account roi nhe");
+        }
     }
 }

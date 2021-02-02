@@ -46,7 +46,8 @@ class AccountController extends Controller
 
     public function delete(DeleteAccountRequest $request)
     {
-        $result = $this->accountRepository->deleteById($request->input('id'));
+//        $result = $this->accountRepository->deleteById($request->input('id'));
+        $result = $this->accountRepository->deleteAccount($request->input('id'));
 
         return processCommonResponse($result);
     }

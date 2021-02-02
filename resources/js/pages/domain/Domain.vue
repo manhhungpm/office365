@@ -4,15 +4,15 @@
             <data-table ref="table" :columns="columns" url="/api/domain/listing" :actions="actions"
                         v-on:initial="setTable"/>
 
-            <v-button color="primary" style-type="air"
-                      class="m-btn--custom m-btn--icon"
-                      slot="tool"
-                      @click.native="showModal">
-                    <span>
-                        <i class="la la-plus"></i>
-                        <span>{{ $t('button.add')}}</span>
-                    </span>
-            </v-button>
+<!--            <v-button color="primary" style-type="air"-->
+<!--                      class="m-btn&#45;&#45;custom m-btn&#45;&#45;icon"-->
+<!--                      slot="tool"-->
+<!--                      @click.native="showModal">-->
+<!--                    <span>-->
+<!--                        <i class="la la-plus"></i>-->
+<!--                        <span>{{ $t('button.add')}}</span>-->
+<!--                    </span>-->
+<!--            </v-button>-->
         </the-portlet>
 
         <domain-modal ref="modal" :on-action-success="updateItemSuccess"/>
@@ -64,18 +64,18 @@
             return '<span class="text-danger">Chưa xác nhận</span>'
           }
         },
-        {
-          data: null,
-          title: 'Hành động',
-          responsivePriority: 1,
-          orderable: false,
-          className: 'text-center',
-          width: '15%',
-          render() {
-            return generateTableAction('edit', 'showDetail') +
-              generateTableAction('delete', 'deleteItem')
-          }
-        }
+        // {
+        //   data: null,
+        //   title: 'Hành động',
+        //   responsivePriority: 1,
+        //   orderable: false,
+        //   className: 'text-center',
+        //   width: '15%',
+        //   render() {
+        //     return generateTableAction('edit', 'showDetail') +
+        //       generateTableAction('delete', 'deleteItem')
+        //   }
+        // }
       ],
       table: null
     }),
