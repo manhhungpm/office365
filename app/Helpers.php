@@ -84,6 +84,8 @@ function processCommonResponse($result, $data = null)
         $code = CODE_ERROR_DELETE_USER_WHEN_HAVE_USER_CREATED_AND_STUDENT_CODE;
     } else if ($result === CODE_ERROR_DELETE_STUDENT_CODE_WHEN_HAVE_STATUS_ACTIVE) {
         $code = CODE_ERROR_DELETE_STUDENT_CODE_WHEN_HAVE_STATUS_ACTIVE;
+    } else if ($result === CODE_ERROR_DELETE_ACCOUNT_WHEN_DOMAIN_ASSIGNED_FOR_USER) {
+        $code = CODE_ERROR_DELETE_ACCOUNT_WHEN_DOMAIN_ASSIGNED_FOR_USER;
     } else {
         $code = CODE_SUCCESS;
     }

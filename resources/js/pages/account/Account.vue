@@ -14,18 +14,18 @@
                     </span>
             </v-button>
 
-<!--            <v-button color="success" style-type="air"-->
-<!--                      class="m-btn&#45;&#45;custom m-btn&#45;&#45;icon"-->
-<!--                      slot="tool"-->
-<!--                      @click.native="syncAccountOffline"-->
-<!--                      style="margin-left: 10px"-->
-<!--                      :loading="isLoading"-->
-<!--            >-->
-<!--                    <span>-->
-<!--                        <i class="la la-refresh"></i>-->
-<!--                        <span>Sync account</span>-->
-<!--                    </span>-->
-<!--            </v-button>-->
+            <!--            <v-button color="success" style-type="air"-->
+            <!--                      class="m-btn&#45;&#45;custom m-btn&#45;&#45;icon"-->
+            <!--                      slot="tool"-->
+            <!--                      @click.native="syncAccountOffline"-->
+            <!--                      style="margin-left: 10px"-->
+            <!--                      :loading="isLoading"-->
+            <!--            >-->
+            <!--                    <span>-->
+            <!--                        <i class="la la-refresh"></i>-->
+            <!--                        <span>Sync account</span>-->
+            <!--                    </span>-->
+            <!--            </v-button>-->
         </the-portlet>
 
         <account-modal ref="modal" :on-action-success="updateItemSuccess"/>
@@ -155,6 +155,8 @@
                             if (data.code == 0) {
                                 notifyDeleteSuccess('tài khoản')
                                 reloadIntelligently($this.$refs.table)
+                            } else if (data.code == 5) {
+                                notify("Thông báo", "Không xóa được Account vì đang được gán cho domain", "danger");
                             } else {
                                 notifyTryAgain()
                             }
@@ -199,7 +201,7 @@
                 const {data} = res
 
                 console.log(data);
-                if(data.code == 0){
+                if (data.code == 0) {
                     setTimeout(function () {
                         // $this.isLoading = false;
                         notify("Thông báo", "Sync thành công", "success");
