@@ -320,4 +320,84 @@ class MSUserRepository extends BaseRepository
         return false;
     }
 
+    //Dung cho goi api tu ben ngoai
+    public function guestStoreApi($arrRequest)
+    {
+        //Decode json nhan dc tu api
+        $arr = json_decode($arrRequest);
+
+        //Detect Reseller
+        $codeRsl = $arr['code'];
+        $idReseller = StudentCode::select('user_id')->where('code', $codeRsl)->get()->toArray()[0]['user_id'];
+
+        $domainId = $arr['domain_id'];
+        $domain = Domain::find($domainId);
+
+        if ($domain != null) {
+            $account = Account::find($domain->account_id);
+
+            if ($account != null) {
+                $data = sendRequest(API_USER, [
+                    'accountEnabled' => !!$arr['accountEnabled'],
+                    'displayName' => $arr['displayName'],
+                    'mailNickname' => $arr['username'],
+                    'userPrincipalName' => $arr['userPrincipalName'],
+                    "passwordPolicies" => "DisablePasswordExpiration",
+                    "usageLocation" => 'VN',
+                    'passwordProfile' => [
+                        'forceChangePasswordNextSignIn' => false,
+                        'password' => $arr['password']
+                    ]
+                ], $account->access_token, 'POST', true);
+
+                if ($data != RESPONSE_ERROR) {
+
+                    //Cập nhật số user đã tạo của reseller
+                    if (isset($idReseller)) {
+                        $reseller = User::find($idReseller);
+                        if ($reseller) {
+                            $reseller->num_user_created++;
+                            $reseller->save();
+                        }
+                    }
+
+                    $code = StudentCode::where('code', $arr['code'])->first();
+
+                    $result = json_decode($data);
+                    if (property_exists($result, 'id')) {
+                        $ms_user = new $this->model;
+                        $ms_user->id = $result->id;
+                        $ms_user->displayName = $result->displayName;
+                        $ms_user->givenName = $result->givenName;
+                        $ms_user->mail = $result->mail;
+                        $ms_user->surname = $result->surname;
+                        $ms_user->userPrincipalName = $result->userPrincipalName;
+                        $ms_user->accountEnabled = $arr['accountEnabled'];
+                        $ms_user->createdDateTime = Carbon::now();
+                        $ms_user->account_id = $account->id;
+                        $ms_user->domain_id = $arr['domain_id'];
+                        $ms_user->code = $code ? $code->code : null;
+                        $ms_user->user_id = $idReseller;
+
+                        if ($ms_user->save()) {
+
+                            Artisan::call("office:assign-user-license", [
+                                'accountId' => $account->id,
+                                'id' => $result->id
+                            ]);
+                            if ($code) {
+                                $code->used_number++;
+                                $code->status = STUDENT_STATUS_ACTIVE;
+                                $code->save();
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
 }

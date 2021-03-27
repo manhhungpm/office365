@@ -166,3 +166,18 @@ function sendRequest($url, $params = array(), $authenToken = '', $method = 'POST
 
     return RESPONSE_ERROR;
 }
+
+function guestStoreApi($arr)
+{
+    $repo = new \App\Repositories\MSUserRepository();
+
+    return $repo->guestStoreApi($arr);
+}
+
+function studentCodeCheckApi($arr)
+{
+    $repo = new \App\Repositories\StudentCodeRepository();
+
+    return $repo->check($arr);
+}
+
