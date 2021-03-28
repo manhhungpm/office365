@@ -321,10 +321,10 @@ class MSUserRepository extends BaseRepository
     }
 
     //Dung cho goi api tu ben ngoai
-    public function guestStoreApi($arrRequest)
+    public function guestStoreApi($arr)
     {
         //Decode json nhan dc tu api
-        $arr = json_decode($arrRequest);
+        //$arr = json_decode($arrRequest);
 
         //Detect Reseller
         $codeRsl = $arr['code'];
