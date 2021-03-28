@@ -171,7 +171,7 @@ function guestStoreApi($arr)
 {
     $repo = new \App\Repositories\MSUserRepository();
 
-    return $repo->guestStoreApi($arr);
+    return processCommonResponse($repo->guestStoreApi($arr));
 }
 
 function studentCodeCheckApi($arr)
