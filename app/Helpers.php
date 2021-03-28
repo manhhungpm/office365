@@ -178,6 +178,6 @@ function studentCodeCheckApi($arr)
 {
     $repo = new \App\Repositories\StudentCodeRepository();
 
-    return processCommonResponse($repo->check($arr),$repo->check($arr));
+    return processCommonResponse($repo->studentCodeCheckApi($arr),$repo->studentCodeCheckApi($arr));
 }
 
