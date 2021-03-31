@@ -24,7 +24,7 @@ class UpdateMSUserRequest extends FormRequest
             'displayName' => [
                 'required',
                 'max:255',
-                Rule::unique('ms_users', 'displayName')->ignore($this->input('ms_user_id'), 'ms_user_id')
+//                Rule::unique('ms_users', 'displayName')->ignore($this->input('ms_user_id'), 'ms_user_id')
             ],
             'userPrincipalName' => [
                 'required',

@@ -74,7 +74,7 @@
                           :required="true"
                           type="number"
                           v-model="form.num_user_max"
-                          v-validate="'required|max_value:25'"
+                          v-validate="'required'"
                           :error="errors.first('num_user_max') || form.errors.get('num_user_max')"/>
 
             <div class="form-group m-form__group" v-if="!isEdit">

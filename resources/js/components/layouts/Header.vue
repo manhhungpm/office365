@@ -53,8 +53,8 @@
                     <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general m-stack--fluid">
                         <div class="m-stack__item m-topbar__nav-wrapper">
                             <ul class="m-topbar__nav m-nav m-nav--inline">
-                                <notification/>
-                                <language-chosen/>
+<!--                                <notification/>-->
+<!--                                <language-chosen/>-->
                                 <profile-actions/>
                             </ul>
                         </div>

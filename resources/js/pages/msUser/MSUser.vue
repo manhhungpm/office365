@@ -52,10 +52,10 @@
                     data: 'displayName',
                     title: 'Tên hiển thị'
                 },
-                {
-                    data: 'id',
-                    title: 'License'
-                },
+                // {
+                //     data: 'id',
+                //     title: 'License'
+                // },
                 {
                     data: 'account',
                     title: 'Tenant Name',

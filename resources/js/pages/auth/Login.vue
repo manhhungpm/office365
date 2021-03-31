@@ -44,8 +44,8 @@
                     </div>
 
                     <div class="m-login__action">
-                        <router-link class="m-link" :to="'/create-ms-user'">Tạo tài khoản MS</router-link>
-                        <a href="javascript:;">
+<!--                        <router-link class="m-link" :to="'/create-ms-user'">Tạo tài khoản MS</router-link>-->
+                        <a href="javascript:;" style="margin: 0 auto">
                             <v-button extra-class="m-btn--custom m-btn--air m-login__btn m-login__btn--primary"
                                       style-type="air" :loading="form.busy" type="submit">
                                 {{ $t('auth.login')}}
