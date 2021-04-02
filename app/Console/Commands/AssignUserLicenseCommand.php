@@ -82,7 +82,9 @@ class AssignUserLicenseCommand extends Command
         for ($i=0;$i<sizeof($query);$i++){
             for ($j=0;$j<sizeof($configLicense["addLicenses"]);$j++){
                 if ($query[$i]["license_parent"] == $configLicense["addLicenses"][$j]["skuId"]){
-                    array_push($configLicense["addLicenses"][$j]["disabledPlans"],$query[$i]["license_child"]);
+                    if(!is_null($query[$i]["license_child"])){
+                        array_push($configLicense["addLicenses"][$j]["disabledPlans"],$query[$i]["license_child"]);
+                    }
                 }
             }
         }
