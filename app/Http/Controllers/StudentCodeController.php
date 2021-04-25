@@ -55,8 +55,11 @@ class StudentCodeController extends Controller
     {
         $params = getDataTableRequestParams($request);
 
+        $searchParams = $request->only('domain', 'reseller');
+
         $total = $this->studentCodeRepository->getList(
             $params['keyword'],
+            $searchParams,
             true
         );
 
@@ -64,6 +67,7 @@ class StudentCodeController extends Controller
             'recordsTotal' => $total,
             'data' => $this->studentCodeRepository->getList(
                 $params['keyword'],
+                $searchParams,
                 false,
                 $params['length'],
                 $params['start'],

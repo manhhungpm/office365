@@ -35,7 +35,14 @@ class MSUserRepository extends BaseRepository
             $query->where('displayName', 'LIKE', "%$keyword%")
                 ->orWhere('givenName', 'LIKE', "%$keyword%")
                 ->orWhere('userPrincipalName', 'LIKE', "%$keyword%")
-                ->orWhere('mail', 'LIKE', "%$keyword%");
+                ->orWhere('mail', 'LIKE', "%$keyword%")
+                ->orWhereHas('reseller',function ($q) use ($keyword){
+                    $q->where('name', 'LIKE', "%$keyword%");
+                })
+                ->orWhereHas('account',function ($q) use ($keyword){
+                    $q->where('app_name', 'LIKE', "%$keyword%");
+                })
+            ;
         });
         if (auth()->user()->hasRole(ROLE_RESELLER)) {
             $query->where('user_id', auth()->id());
@@ -305,19 +312,36 @@ class MSUserRepository extends BaseRepository
 
     public function changeStatus($id, $status)
     {
+        $accEnable = true;
+        if ($status != 1){
+            $accEnable = false;
+        }
         $msUser = $this->model->find($id);
 
-        if ($msUser != null) {
-            $msUser->accountEnabled = $status;
+        try {
+            $api = sendRequest(API_USER . '/' . $msUser->id, [
+                'accountEnabled' => $accEnable,
+            ], $msUser->account->access_token, 'PATCH', true);
 
-            if ($msUser->save()) {
-                return true;
-            } else {
+            if ($api != RESPONSE_ERROR) {
+
+                if ($msUser != null) {
+                    $msUser->accountEnabled = $status;
+
+                    if ($msUser->save()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
                 return false;
             }
+        } catch (QueryException $exception) {
+            throw new \App\Exceptions\QueryException();
         }
 
-        return false;
+
     }
 
     //Dung cho goi api tu ben ngoai

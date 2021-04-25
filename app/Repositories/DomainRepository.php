@@ -52,7 +52,7 @@ class DomainRepository extends BaseRepository
     public function getListAll($keyword = null, $reseller = null, $counting = false, $limit = 10, $offset = 0)
     {
         $query = $this->model
-            ->where('id', 'LIKE', "%$keyword%");
+            ->where('id', 'LIKE', "%$keyword%")->where('isVerified',1);
 
         if ($reseller != null) {
             $query->whereHas('resellers', function ($q) use ($reseller) {

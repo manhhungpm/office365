@@ -1,22 +1,28 @@
 <template>
     <div>
-        <the-portlet title="Danh sách mã bảo mật">
-            <data-table ref="table" :columns="columns" url="/api/student-code/listing" :actions="actions"
-                        v-on:initial="setTable"/>
+        <div class="row">
+            <div class="col-md-12">
+                <student-code-filter @search="search"></student-code-filter>
+            </div>
+            <div class="col-md-12">
+                <the-portlet title="Danh sách mã bảo mật">
+                    <data-table ref="table" :columns="columns" url="/api/student-code/listing" :actions="actions"
+                                v-on:initial="setTable" :post-data="tableFilter"/>
 
-            <v-button color="primary" style-type="air"
-                      class="m-btn--custom m-btn--icon"
-                      slot="tool"
-                      @click.native="showModal">
+                    <v-button color="primary" style-type="air"
+                              class="m-btn--custom m-btn--icon"
+                              slot="tool"
+                              @click.native="showModal">
                     <span>
                         <i class="la la-plus"></i>
                         <span>{{ $t('button.add')}}</span>
                     </span>
-            </v-button>
-        </the-portlet>
-
-        <student-code-modal ref="modal" :on-action-success="updateItemSuccess"/>
-        <student-code-show-user-created-modal ref="showUserCreatedModal"></student-code-show-user-created-modal>
+                    </v-button>
+                </the-portlet>
+            </div>
+            <student-code-modal ref="modal" :on-action-success="updateItemSuccess"/>
+            <student-code-show-user-created-modal ref="showUserCreatedModal"></student-code-show-user-created-modal>
+        </div>
     </div>
 </template>
 
@@ -31,16 +37,17 @@
     import {ROLE_ADMIN} from '~/constants/roles'
     import * as studentCodeStatus from '~/constants/studentCodeStatus'
     import StudentCodeShowUserCreatedModal from "./partials/StudentCodeShowUserCreatedModal";
+    import StudentCodeFilter from "./partials/StudentCodeFilter";
 
     const vm = {
-        components: {StudentCodeShowUserCreatedModal, StudentCodeModal},
+        components: {StudentCodeFilter, StudentCodeShowUserCreatedModal, StudentCodeModal},
         layout: 'default',
         middleware: 'auth',
         metaInfo() {
             return {title: 'Quản lý mã bảo mật'}
         },
         data: () => ({
-
+            tableFilter : null,
             table: null
         }),
         mounted() {
@@ -49,6 +56,11 @@
         methods: {
             setTable(table) {
                 this.table = table
+            },
+            async search(value) {
+                this.tableFilter = value;
+                await this.$nextTick();
+                this.$refs.table.reload();
             },
             deleteItem(table, rowData) {
                 let $this = this
@@ -122,7 +134,7 @@
                     }
                 })
             },
-            showUserCreated(table, rowData){
+            showUserCreated(table, rowData) {
                 this.$refs.showUserCreatedModal.show(rowData);
             }
         },

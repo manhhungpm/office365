@@ -27,12 +27,34 @@ class StudentCodeRepository extends BaseRepository
      * @param string $orderType
      * @return mixed
      */
-    public function getList($keyword = null, $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
+    public function getList($keyword = null, $searchParams = [], $counting = false, $limit = 10, $offset = 0, $orderBy = 'name', $orderType = 'asc')
     {
         $this->setStatusUnused();
 
         $query = $this->model
             ->where('code', 'LIKE', "%$keyword%");
+
+        collect($searchParams)->each(function ($item, $key) use ($query) {
+            switch ($key) {
+                case 'domain':
+                    if (isset($item)) {
+                        $query->whereHas('domain', function ($q) use ($item) {
+                            $q->where('domain_id', $item);
+                        });
+                    }
+                    break;
+                case 'reseller':
+                    if (isset($item)) {
+                        $query->whereHas('reseller', function ($q) use ($item) {
+                            $q->where('id', $item);
+                        });
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+
         if (auth()->user()->hasRole(ROLE_RESELLER)) {
             $query->where('user_id', auth()->id());
         }
