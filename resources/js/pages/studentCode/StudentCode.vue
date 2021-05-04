@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-md-12">
-                <student-code-filter @search="search"></student-code-filter>
+                <student-code-filter @search="search" v-if="role == 'Admin'"></student-code-filter>
             </div>
             <div class="col-md-12">
                 <the-portlet title="Danh sách mã bảo mật">

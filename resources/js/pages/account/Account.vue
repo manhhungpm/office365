@@ -60,10 +60,10 @@
                     data: 'app_name',
                     title: 'Tên ứng dụng'
                 },
-                // {
-                //   data: 'description',
-                //   title: 'Mô tả'
-                // },
+                {
+                  data: 'description',
+                  title: 'Mô tả'
+                },
                 {
                     data: 'client_id',
                     title: 'Client ID'
