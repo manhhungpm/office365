@@ -44,11 +44,21 @@ class SyncUserCommand extends Command
         $accounts = Account::where('status', ACCOUNT_STATUS_ACTIVE)->get();
         $domainMap = $this->createDomainMap();
         foreach ($accounts as $account) {
-            $data = sendRequest(API_USER . '?$select=displayName,givenName,mail,passwordProfile,mobilePhone,surname,userPrincipalName,createdDateTime,id,state,userType,accountEnabled', [], $account->access_token, 'GET');
+            $data = sendRequest(API_USER . '?$top=999&$select=displayName,givenName,mail,passwordProfile,mobilePhone,surname,userPrincipalName,createdDateTime,id,state,userType,accountEnabled', [], $account->access_token, 'GET');
 
             if ($data != '') {
                 $result = json_decode($data);
                 $users = $result->value;
+
+                //Trang user tiep theo (vuot qua 999 user)
+                if($result->{'@odata.nextLink'} != ''){
+                    $nextLink = $result->{'@odata.nextLink'};
+                    $response = sendRequest($nextLink, [], $account->access_token, 'GET');
+
+                    $responseDeconde = json_decode($response);
+                    $users = array_merge($users,$responseDeconde->value);
+                }
+                //
 
                 foreach ($users as $user) {
                     $userPrincipalName = $user->userPrincipalName;

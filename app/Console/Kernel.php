@@ -7,6 +7,7 @@ use App\Console\Commands\OfficeGetTokenCommand;
 use App\Console\Commands\SyncDomainCommand;
 use App\Console\Commands\SyncSubscribedSkuCommand;
 use App\Console\Commands\SyncUserCommand;
+use App\Console\Commands\TestSyncUser;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -23,7 +24,8 @@ class Kernel extends ConsoleKernel
         SyncDomainCommand::class,
         SyncUserCommand::class,
         SyncSubscribedSkuCommand::class,
-        AssignUserLicenseCommand::class
+        AssignUserLicenseCommand::class,
+        TestSyncUser::class
     ];
 
     /**
