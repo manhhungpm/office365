@@ -1,5 +1,5 @@
 <template>
-    <the-modal ref="modal" :title="isEdit ? 'Cập nhật tài khoản Office 265' : 'Thêm tài khoản Office 365'"
+    <the-modal ref="modal" :title="isEdit ? 'Cập nhật tài khoản Office 365' : 'Thêm tài khoản Office 365'"
                :onHidden="onModalHidden"
                :center="center"
     >
@@ -45,9 +45,12 @@
 
         <template slot="footer">
             <button type="button" class="btn btn-secondary" @click="hide">{{ $t('button.cancel')}}</button>
-            <button type="button" class="btn btn-primary" @click="validateForm">
-                {{ isEdit ? $t('button.update'): $t('button.add')}}
-            </button>
+<!--            <button type="button" class="btn btn-primary" @click="validateForm">-->
+<!--                {{ isEdit ? $t('button.update'): $t('button.add')}}-->
+<!--            </button>-->
+            <v-button @click.native="validateForm" :loading="loading" class="btn btn-primary">
+                <span>{{ isEdit ? $t('button.update'): $t('button.add')}}</span>
+            </v-button>
         </template>
     </the-modal>
 </template>
@@ -58,6 +61,7 @@
     import {SUCCESS} from '~/constants/code'
     import {notify, notifyTryAgain, notifyUpdateSuccess, notifyAddSuccess} from '~/helpers/bootstrap-notify'
     import axios from 'axios'
+    import VButton from "../../../components/common/VButton";
 
     const defaultAccount = {
         name: '',
@@ -69,6 +73,7 @@
 
     export default {
         name: 'AccountModal',
+        components: {VButton},
         props: {
             center: {
                 type: Boolean,
@@ -83,7 +88,8 @@
         data() {
             return {
                 isEdit: false,
-                form: new Form(defaultAccount)
+                form: new Form(defaultAccount),
+                loading: false
             }
         },
         mounted() {
@@ -119,22 +125,27 @@
             },
             async addItem() {
                 try {
+                    this.loading = true
                     const {data} = await this.form.post('/api/account/store')
 
                     if (data.code == SUCCESS) {
+                        this.loading = false
                         notifyAddSuccess('tài khoản')
                         this.$refs.modal.hide()
                         this.onActionSuccess()
                     } else {
+                        this.loading = false
                         notifyTryAgain()
                     }
                 } catch (e) {
+                    this.loading = false
                     const {status} = e.response
 
                     if (status != 422) {
                         notifyTryAgain()
                     }
                 }
+                this.loading = false
             },
             async updateItem() {
                 try {

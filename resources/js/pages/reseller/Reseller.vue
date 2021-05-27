@@ -83,8 +83,31 @@
                     }
                 },
                 {
-                    data: 'num_user_max',
-                    title: 'Credits'
+                    data: '',
+                    title: 'Credits',
+                    render(data,type,row){
+                        //totalCodeMax
+                        let totalCodeMax = 0;
+                        let code = row['codes'];
+                        code.forEach(function (e) {
+                            totalCodeMax += e.max_user;
+                        })
+                        // console.log(totalCodeMax)
+
+                        // totalCreateByHand
+                        let totalCreateByHand = 0;
+                        let ms = row['ms_user'];
+                        ms.forEach(function (e) {
+                            if (e.code == null){
+                                totalCreateByHand += 1;
+                            }
+                        })
+
+                        let totalUsed = parseInt(totalCodeMax, 10) + parseInt(totalCreateByHand, 10)
+
+                        let restUser = row['num_user_max'] - totalUsed
+                        return restUser + "/" + row['num_user_max']
+                    }
                 },
                 {
                     data: 'num_user_created',
@@ -101,6 +124,10 @@
                 //         }
                 //     }
                 // },
+                {
+                    data: 'note',
+                    title: 'Ghi chú'
+                },
                 {
                     data: 'status',
                     title: 'Trạng thái',

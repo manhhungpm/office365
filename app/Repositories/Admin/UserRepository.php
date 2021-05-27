@@ -47,7 +47,7 @@ class UserRepository extends BaseRepository
         }
 
         if (!$counting) {
-            $query->with('domains:domains.domain_id,domains.id');
+            $query->with('domains:domains.domain_id,domains.id')->with('codes')->with('msUser');
 
             if ($limit > 0) {
                 $query->skip($offset)

@@ -51,7 +51,7 @@ class SyncUserCommand extends Command
                 $users = $result->value;
 
                 //Trang user tiep theo (vuot qua 999 user)
-                if($result->{'@odata.nextLink'} != ''){
+                if(property_exists($result,'@odata.nextLink')){
                     $nextLink = $result->{'@odata.nextLink'};
                     $response = sendRequest($nextLink, [], $account->access_token, 'GET');
 

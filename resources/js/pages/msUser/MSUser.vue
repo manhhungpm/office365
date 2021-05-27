@@ -5,7 +5,7 @@
                         :fixed-columns-left="2"
                         v-on:initial="setTable"/>
 
-            <v-button color="primary" style-type="air"
+            <v-button v-if="!isAdmin" color="primary" style-type="air"
                       class="m-btn--custom m-btn--icon"
                       slot="tool"
                       @click.native="showModal">
@@ -16,7 +16,7 @@
             </v-button>
         </the-portlet>
 
-        <account-modal ref="modal" :on-action-success="updateItemSuccess"/>
+        <ms-user-modal ref="modal" :on-action-success="updateItemSuccess"/>
         <m-s-user-renew-password-modal ref="renewPasswordModal"
                                        :on-action-success="updateItemSuccess"></m-s-user-renew-password-modal>
     </div>
@@ -33,7 +33,7 @@
     import MSUserModal from './partials/MSUserModal'
     import MSUserRenewPasswordModal from "./partials/MSUserRenewPasswordModal";
 
-    Vue.component('account-modal', MSUserModal)
+    Vue.component('ms-user-modal', MSUserModal)
 
     const vm = {
         components: {MSUserRenewPasswordModal},
@@ -209,6 +209,9 @@
             }
         },
         computed: {
+            isAdmin() {
+                return this.$store.getters['auth/role'] === 'Admin'
+            },
             actions() {
                 return [
                     {
